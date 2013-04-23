@@ -14,9 +14,10 @@ def install(source_dir, install_dir, backup_dir):
         if os.path.exists(target):
             backup = os.path.join(backup_dir, dotfile)
             if os.path.exists(backup):
-                sys.exit('Backup exists: %s' % backup)
-            os.rename(target, backup)
-            print('Backed up %s' % target)
+                print('Backup exists: %s' % backup)
+            else:
+                os.rename(target, backup)
+                print('Backed up %s' % target)
         if os.readlink(target) == source:
             print('Warning: Already linked: %s' % target)
         else:
