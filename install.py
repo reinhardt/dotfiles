@@ -2,7 +2,7 @@
 import os
 import sys
 
-dotfiles = ['.bashrc', ]
+dotfiles = ['.bashrc', '.vimrc', ]
 
 
 def install(source_dir, install_dir, backup_dir):
