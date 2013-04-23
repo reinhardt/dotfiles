@@ -17,8 +17,11 @@ def install(source_dir, install_dir, backup_dir):
                 sys.exit('Backup exists: %s' % backup)
             os.rename(target, backup)
             print('Backed up %s' % target)
-        os.symlink(source, target)
-        print('Linked    %s' % target)
+        if os.readlink(target) == source:
+            print('Warning: Already linked: %s' % target)
+        else:
+            os.symlink(source, target)
+            print('Linked    %s' % target)
     print('Backups in %s' % backup_dir)
 
 
