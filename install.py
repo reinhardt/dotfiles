@@ -18,8 +18,12 @@ def install(source_dir, install_dir, backup_dir):
             else:
                 os.rename(target, backup)
                 print('Backed up %s' % target)
-        if os.readlink(target) == source:
-            print('Warning: Already linked: %s' % target)
+        if os.path.exists(target):
+            if os.readlink(target) == source:
+                print('Warning: Already linked: %s' % target)
+            else:
+                print('Warning: Could not back up, not linking: %s' % target)
+                continue
         else:
             os.symlink(source, target)
             print('Linked    %s' % target)
