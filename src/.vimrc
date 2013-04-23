@@ -14,6 +14,7 @@ Bundle 'Rykka/riv.vim'
 " Bundle 'kevinw/pyflakes-vim'
 " Bundle 'scrooloose/syntastic.git'
 Bundle 'alfredodeza/khuno.vim'
+Bundle 'altercation/vim-colors-solarized'
 
 filetype on
 filetype plugin indent on
