@@ -19,6 +19,7 @@ Bundle 'sanders/snipmate.vim'
 Bundle 'sjl/gundo.vim'
 Bundle 'sontek/minibufexpl.vim'
 Bundle 'sontek/rope-vim'
+Bundle 'altercation/vim-colors-solarized'
 
 filetype on
 filetype plugin indent on
