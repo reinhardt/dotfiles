@@ -10,6 +10,14 @@ def install(source_dir, install_dir, backup_dir):
     for dotfile in dotfiles:
         source = os.path.join(source_dir, dotfile)
         target = os.path.join(install_dir, dotfile)
+        if os.path.isdir(target):
+            if not os.path.isdir(source):
+                print('Warning: not overwriting dir with file: %s' % target)
+                continue
+            sub_backup_dir = os.path.join(backup_dir, dotfile)
+            install(source, target, sub_backup_dir)
+            continue
+
         if os.path.exists(target):
             backup = os.path.join(backup_dir, dotfile)
             if os.path.exists(backup):
@@ -37,6 +45,13 @@ def uninstall(source_dir, install_dir, backup_dir):
         source = os.path.join(source_dir, dotfile)
         target = os.path.join(install_dir, dotfile)
         backup = os.path.join(backup_dir, dotfile)
+        if os.path.isdir(target):
+            if not os.path.isdir(backup):
+                print('Warning: not overwriting dir with file: %s' % backup)
+                continue
+            sub_backup_dir = os.path.join(backup_dir, dotfile)
+            uninstall(source, target, sub_backup_dir)
+            continue
         if not os.path.exists(target) or not os.readlink(target) == source:
             print('Warning: Not linked to our version: %s' % target)
             continue
@@ -57,7 +72,7 @@ if __name__ == '__main__':
         install_dir = sys.argv[1]
     else:
         install_dir = os.path.expanduser('~')
-    backup_dir = os.path.join(os.path.expanduser('~'), 'dotfiles.old')
+    backup_dir = os.path.join(install_dir, 'dotfiles.old')
     here_path = os.path.abspath(__file__)
     here_dir = os.path.split(here_path)[0]
     source_dir = os.path.join(here_dir, 'src')
