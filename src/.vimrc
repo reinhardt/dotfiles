@@ -15,11 +15,12 @@ Bundle 'Rykka/riv.vim'
 " Bundle 'scrooloose/syntastic.git'
 Bundle 'alfredodeza/khuno.vim'
 Bundle 'ervandew/supertab'
-Bundle 'sanders/snipmate.vim'
+Bundle 'msanders/snipmate.vim'
 Bundle 'sjl/gundo.vim'
 Bundle 'sontek/minibufexpl.vim'
 Bundle 'sontek/rope-vim'
 Bundle 'altercation/vim-colors-solarized'
+Bundle 'jamessan/vim-gnupg'
 
 filetype on
 filetype plugin indent on
