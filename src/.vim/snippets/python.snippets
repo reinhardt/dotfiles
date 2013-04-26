@@ -1,4 +1,11 @@
 snippet pdb
-    import pdb; pdb.set_trace()
+	import pdb; pdb.set_trace()
 snippet ipdb
-    import ipdb; ipdb.set_trace()
+	import ipdb; ipdb.set_trace()
+snippet Test
+	class Test${1}(unittest.TestCase):
+		${2}
+snippet log
+	import logging
+
+	log = logging.getLogger(__name__)

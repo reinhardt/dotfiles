@@ -10,17 +10,21 @@ Bundle 'gmarik/vundle'
 
 " My Bundles here:
 "
-Bundle 'Rykka/riv.vim'
 " Bundle 'kevinw/pyflakes-vim'
+" Bundle 'msanders/snipmate.vim'
 " Bundle 'scrooloose/syntastic.git'
+Bundle "MarcWeber/vim-addon-mw-utils"
+Bundle "garbas/vim-snipmate"
+Bundle "honza/vim-snippets"
+Bundle "tomtom/tlib_vim"
+Bundle 'Rykka/riv.vim'
 Bundle 'alfredodeza/khuno.vim'
+Bundle 'altercation/vim-colors-solarized'
 Bundle 'ervandew/supertab'
-Bundle 'msanders/snipmate.vim'
+Bundle 'jamessan/vim-gnupg'
 Bundle 'sjl/gundo.vim'
 Bundle 'sontek/minibufexpl.vim'
 Bundle 'sontek/rope-vim'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'jamessan/vim-gnupg'
 
 filetype on
 filetype plugin indent on
