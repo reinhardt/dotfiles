@@ -30,7 +30,10 @@ def install(source_dir, install_dir, backup_dir):
                     print('Warning: not overwriting dir with file: %s'
                           % target)
             else:
-                already_linked = (os.readlink(target) == source)
+                try:
+                    already_linked = (os.readlink(target) == source)
+                except OSError:
+                    already_linked = False
                 if already_linked:
                     print('Already linked: %s' % target)
                 else:
