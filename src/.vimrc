@@ -23,7 +23,7 @@ Bundle 'altercation/vim-colors-solarized'
 Bundle 'ervandew/supertab'
 Bundle 'jamessan/vim-gnupg'
 Bundle 'sjl/gundo.vim'
-Bundle 'sontek/minibufexpl.vim'
+" Bundle 'sontek/minibufexpl.vim'
 Bundle 'sontek/rope-vim'
 
 filetype on
