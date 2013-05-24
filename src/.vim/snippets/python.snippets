@@ -11,3 +11,9 @@ snippet log
 	import logging
 
 	log = logging.getLogger(__name__)
+snippet View
+	from five import grok
+
+	class ${1}(grok.View):
+		grok.name("${2}")
+
