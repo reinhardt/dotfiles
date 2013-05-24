@@ -108,3 +108,6 @@ export VI_PASSWORD=
 export PYTHONSTARTUP="/home/reinhardt/.pythonrc"
 export MOZ_NO_REMOTE=1
 export LESS="R"
+
+[ -a /etc/profile.d/nix.sh ] && source /etc/profile.d/nix.sh
+export NIX_PATH=~/.nix-defexpr/channels
