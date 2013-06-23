@@ -25,6 +25,9 @@ Bundle 'jamessan/vim-gnupg'
 Bundle 'sjl/gundo.vim'
 " Bundle 'sontek/minibufexpl.vim'
 Bundle 'sontek/rope-vim'
+Bundle 'mrtazz/simplenote.vim'
+
+source ~/.simplenoterc
 
 filetype on
 filetype plugin indent on
