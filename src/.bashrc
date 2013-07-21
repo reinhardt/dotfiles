@@ -21,7 +21,8 @@ shopt -s histappend
 shopt -s checkwinsize
 
 # make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+export LESSOPEN="| /usr/bin/lesspipe %s";
+export LESSCLOSE="/usr/bin/lesspipe %s %s";
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
@@ -91,7 +92,7 @@ alias ll='ls -l'
 alias la='ls -A'
 #alias l='ls -CF'
 
-alias gr="grep -rI --exclude-dir=.svn --exclude-dir=.git"
+alias gr="grep -RI --exclude-dir=.svn --exclude-dir=.git"
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
