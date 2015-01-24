@@ -1,32 +1,34 @@
 set nocompatible               " be iMproved
 filetype off                   " required!
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle.vim/
+call vundle#begin()
 
 " let Vundle manage Vundle
 " required! 
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/vundle'
 
-" My Bundles here:
+" My Plugins here:
 "
-" Bundle 'kevinw/pyflakes-vim'
-" Bundle 'msanders/snipmate.vim'
-" Bundle 'scrooloose/syntastic.git'
-Bundle "MarcWeber/vim-addon-mw-utils"
-Bundle "garbas/vim-snipmate"
-Bundle "honza/vim-snippets"
-Bundle "tomtom/tlib_vim"
-Bundle 'Rykka/riv.vim'
-Bundle 'alfredodeza/khuno.vim'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'ervandew/supertab'
-Bundle 'jamessan/vim-gnupg'
-Bundle 'sjl/gundo.vim'
-" Bundle 'sontek/minibufexpl.vim'
-Bundle 'sontek/rope-vim'
-Bundle 'mrtazz/simplenote.vim'
-Bundle 'joonty/vdebug.git'
+" Plugin 'kevinw/pyflakes-vim'
+" Plugin 'msanders/snipmate.vim'
+" Plugin 'scrooloose/syntastic.git'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'garbas/vim-snipmate'
+Plugin 'honza/vim-snippets'
+Plugin 'tomtom/tlib_vim'
+Plugin 'Rykka/riv.vim'
+Plugin 'alfredodeza/khuno.vim'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'ervandew/supertab'
+Plugin 'jamessan/vim-gnupg'
+Plugin 'sjl/gundo.vim'
+" Plugin 'sontek/minibufexpl.vim'
+Plugin 'sontek/rope-vim'
+Plugin 'mrtazz/simplenote.vim'
+Plugin 'joonty/vdebug.git'
+
+call vundle#end()
 
 source ~/.vim/simplenoterc
 
