@@ -38,7 +38,6 @@ function ToggleWrap()
     echo "Wrap OFF"
     setlocal nowrap
     setlocal textwidth=79
-    set virtualedit=all
     silent! nunmap <buffer> <Up>
     silent! nunmap <buffer> <Down>
     silent! nunmap <buffer> <Home>
@@ -55,7 +54,6 @@ function ToggleWrap()
     echo "Wrap ON"
     setlocal wrap linebreak nolist
     setlocal textwidth=0
-    set virtualedit=
     setlocal display+=lastline
     noremap  <buffer> <silent> k gk
     noremap  <buffer> <silent> j gj
@@ -71,6 +69,8 @@ function ToggleWrap()
     inoremap <buffer> <silent> <End>  <C-o>g<End>
   endif
 endfunction
+
+cnoremap <ESC><BS> <C-W>
 
 filetype on
 filetype plugin indent on
@@ -92,7 +92,7 @@ highlight PyFlakes ctermbg=124
 let g:vdebug_options= {
 \    "port" : 9003,
 \    "server" : 'localhost',
-\    "timeout" : 20,
+\    "timeout" : 60,
 \    "on_close" : 'detach',
 \    "break_on_open" : 1,
 \    "ide_key" : '',
@@ -104,4 +104,17 @@ let g:vdebug_options= {
 \    "marker_default" : '⬦',
 \    "marker_closed_tree" : '▸',
 \    "marker_open_tree" : '▾'
+\}
+let g:vdebug_keymap = {
+\    "run" : "c",
+\    "run_to_cursor" : "<F1>",
+\    "step_over" : "n",
+\    "step_into" : "s",
+\    "step_out" : "r",
+\    "close" : "<F6>",
+\    "detach" : "<F7>",
+\    "set_breakpoint" : "<F10>",
+\    "get_context" : "<C-F11>",
+\    "eval_under_cursor" : "<F12>",
+\    "eval_visual" : "<Leader>e",
 \}
