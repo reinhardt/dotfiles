@@ -119,3 +119,9 @@ let g:vdebug_keymap = {
 \    "eval_under_cursor" : "<F12>",
 \    "eval_visual" : "<Leader>e",
 \}
+
+let g:pymode_folding = 0
+let g:pymode_lint_cwindow = 0
+let g:pymode_rope_complete_on_dot = 0
+let g:pymode_rope = 0
+let g:pymode_trim_whitespaces = 0
