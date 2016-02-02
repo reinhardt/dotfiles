@@ -83,6 +83,7 @@ set wildmode=list:longest
 set hidden
 set laststatus=2
 set statusline=%F%m%r%h%w\ \ \ \ %=%02l,%02v\ of\ %L\ [%p%%]
+set backspace=indent,eol,start
 " set textwidth=79
 set t_Co=256
 set background=dark
