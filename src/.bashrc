@@ -52,7 +52,7 @@ fi
 
 if [ "$color_prompt" = yes ]; then
     case "$HOSTNAME" in
-    starling|oira|unibw)
+    starling|oira|unibw|recensio)
         path_color='[01;35m'
         ;;
     floyd)
