@@ -20,6 +20,7 @@ Plugin 'tomtom/tlib_vim'
 Plugin 'Rykka/riv.vim'
 " Plugin 'alfredodeza/khuno.vim'
 Plugin 'altercation/vim-colors-solarized'
+Plugin 'limadm/vim-blues'
 Plugin 'ervandew/supertab'
 Plugin 'jamessan/vim-gnupg'
 Plugin 'sjl/gundo.vim'
@@ -28,13 +29,24 @@ Plugin 'sjl/gundo.vim'
 Plugin 'mrtazz/simplenote.vim'
 " Plugin 'joonty/vdebug.git'
 Plugin 'klen/python-mode'
+Bundle 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plugin 'kana/vim-metarw'
+Plugin 'kana/vim-metarw-git'
+Plugin 'mattn/webapi-vim'
+Plugin 'mattn/vim-metarw-simplenote'
+Plugin 'blueyed/vim-diminactive'
+Plugin 'airblade/vim-gitgutter'
 
 call vundle#end()
 
 source ~/.vim/simplenoterc
+" command! Daily Simplenote -o f704b70fc4ed65c4e19088821954f6ff
+command! Daily edit sn:f704b70fc4ed65c4e19088821954f6ff
+
+let s:email = 'askesemann@googlemail.com'
 
 noremap <silent> <Leader>w :call ToggleWrap()<CR>
-function ToggleWrap()
+function! ToggleWrap()
   if &wrap
     echo "Wrap OFF"
     setlocal nowrap
@@ -71,6 +83,23 @@ function ToggleWrap()
   endif
 endfunction
 
+noremap <silent> <Leader>s :call ToggleSpell()<CR>
+function! ToggleSpell()
+  if &spell
+    if &spelllang == "en"
+      echo "Spell DE"
+      setlocal spelllang=de
+    else
+      echo "Spell OFF"
+      setlocal nospell
+    endif
+  else
+    echo "Spell EN"
+    setlocal spell
+    setlocal spelllang=en
+  endif
+endfunction
+
 cnoremap <ESC><BS> <C-W>
 
 filetype on
@@ -86,10 +115,22 @@ set statusline=%F%m%r%h%w\ \ \ \ %=%02l,%02v\ of\ %L\ [%p%%]
 set backspace=indent,eol,start
 " set textwidth=79
 set t_Co=256
+" if strftime("%H") < 10
+" " for sunny conditions
+" set background=light
+" colorscheme zellner
+" else
 set background=dark
-colorscheme solarized
+colorscheme blues
+" endif
 highlight Normal ctermbg=none
 highlight PyFlakes ctermbg=124
+highlight ColorColumn ctermbg=236 guibg=#eee8d5
+
+" let g:diminactive_use_syntax = 1
+
+set spell
+set spelllang=en
 
 let g:vdebug_options= {
 \    "port" : 9003,
@@ -126,3 +167,6 @@ let g:pymode_lint_cwindow = 0
 let g:pymode_rope_complete_on_dot = 0
 let g:pymode_rope = 0
 let g:pymode_trim_whitespaces = 0
+
+let g:netrw_localrmdir='rm -r'
+let g:netrw_keepdir=0
