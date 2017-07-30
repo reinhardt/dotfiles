@@ -21,8 +21,8 @@ shopt -s histappend
 shopt -s checkwinsize
 
 # make less more friendly for non-text input files, see lesspipe(1)
-export LESSOPEN="| /usr/bin/lesspipe %s";
-export LESSCLOSE="/usr/bin/lesspipe %s %s";
+#export LESSOPEN="| /usr/bin/lesspipe %s";
+#export LESSCLOSE="/usr/bin/lesspipe %s %s";
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
@@ -52,7 +52,7 @@ fi
 
 if [ "$color_prompt" = yes ]; then
     case "$HOSTNAME" in
-    starling|oira|unibw|recensio)
+    starling|oira|unibw|recensio|lmu|pi)
         path_color='[01;35m'
         ;;
     floyd)
@@ -120,11 +120,27 @@ export VI_SERVER=192.168.201.230
 export VI_USER=root
 export VI_PASSWORD=
 
+export PYTHONPATH="/home/reinhardt/projects/powerline"
 export PYTHONSTARTUP="/home/reinhardt/.pythonrc"
-export MOZ_NO_REMOTE=1
 export LESS="R"
 
 export EDITOR="vim"
 
 [ -a /etc/profile.d/nix.sh ] && source /etc/profile.d/nix.sh
 export NIX_PATH=~/.nix-defexpr/channels
+
+if [ -f "${HOME}/.gpg-agent-info" ]; then
+  . "${HOME}/.gpg-agent-info"
+  export GPG_AGENT_INFO
+  export SSH_AUTH_SOCK
+fi
+GPG_TTY=$(tty)
+export GPG_TTY
+
+if [[ $HOSTNAME == "starling" ]]; then
+    cd ~/webwork.deployment;
+elif [[ $HOSTNAME == "recensio" ]]; then
+    cd ~/recensio.deployment;
+elif [[ $HOSTNAME == "unibw" ]]; then
+    cd ~/unibw.deployment;
+fi
