@@ -46,25 +46,8 @@ command! Daily edit sn:f704b70fc4ed65c4e19088821954f6ff
 let s:email = 'askesemann@googlemail.com'
 
 noremap <silent> <Leader>w :call ToggleWrap()<CR>
-function! ToggleWrap()
-  if &wrap
-    echo "Wrap OFF"
-    setlocal nowrap
-    setlocal textwidth=79
-    silent! nunmap <buffer> <Up>
-    silent! nunmap <buffer> <Down>
-    silent! nunmap <buffer> <Home>
-    silent! nunmap <buffer> <End>
-    silent! nunmap <buffer> j
-    silent! nunmap <buffer> k
-    silent! nunmap <buffer> 0
-    silent! nunmap <buffer> $
-    silent! iunmap <buffer> <Up>
-    silent! iunmap <buffer> <Down>
-    silent! iunmap <buffer> <Home>
-    silent! iunmap <buffer> <End>
-  else
-    echo "Wrap ON"
+function! SetWrap(value)
+  if a:value
     setlocal wrap linebreak nolist
     setlocal textwidth=0
     setlocal display+=lastline
@@ -80,8 +63,35 @@ function! ToggleWrap()
     inoremap <buffer> <silent> <Down> <C-o>gj
     inoremap <buffer> <silent> <Home> <C-o>g<Home>
     inoremap <buffer> <silent> <End>  <C-o>g<End>
+  else
+    setlocal nowrap
+    setlocal textwidth=79
+    silent! nunmap <buffer> <Up>
+    silent! nunmap <buffer> <Down>
+    silent! nunmap <buffer> <Home>
+    silent! nunmap <buffer> <End>
+    silent! nunmap <buffer> j
+    silent! nunmap <buffer> k
+    silent! nunmap <buffer> 0
+    silent! nunmap <buffer> $
+    silent! iunmap <buffer> <Up>
+    silent! iunmap <buffer> <Down>
+    silent! iunmap <buffer> <Home>
+    silent! iunmap <buffer> <End>
   endif
 endfunction
+
+function! ToggleWrap()
+  if &wrap
+    echo "Wrap OFF"
+    call SetWrap(0)
+  else
+    echo "Wrap ON"
+    call SetWrap(1)
+  endif
+endfunction
+
+call SetWrap(0)
 
 noremap <silent> <Leader>s :call ToggleSpell()<CR>
 function! ToggleSpell()
@@ -122,8 +132,10 @@ set t_Co=256
 " else
 set background=dark
 colorscheme blues
+hi! SpellBad cterm=underline ctermbg=235
 " endif
 highlight Normal ctermbg=none
+highlight Visual ctermbg=240
 highlight PyFlakes ctermbg=124
 highlight ColorColumn ctermbg=236 guibg=#eee8d5
 
