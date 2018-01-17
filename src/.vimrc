@@ -91,7 +91,7 @@ function! ToggleWrap()
   endif
 endfunction
 
-call SetWrap(0)
+call SetWrap(1)
 
 noremap <silent> <Leader>s :call ToggleSpell()<CR>
 function! ToggleSpell()
@@ -123,6 +123,7 @@ set hidden
 set laststatus=2
 set statusline=%F%m%r%h%w\ \ \ \ %=%02l,%02v\ of\ %L\ [%p%%]
 set backspace=indent,eol,start
+set number
 " set textwidth=79
 set t_Co=256
 " if strftime("%H") < 10
@@ -182,3 +183,8 @@ let g:pymode_trim_whitespaces = 0
 
 let g:netrw_localrmdir='rm -r'
 let g:netrw_keepdir=0
+
+if has("gui_running")
+    cmap <C-V>		<C-R>+
+    exe 'inoremap <script> <C-V> <C-G>u' . paste#paste_cmd['i']
+endif
