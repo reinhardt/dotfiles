@@ -1,0 +1,7 @@
+application/pdf; evince %s
+application/ms-tnef; tnef -C /tmp/ -w %s
+application/vnd.openxmlformats-officedocument.presentationml.presentation; libreoffice %s
+application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; libreoffice %s
+image/jpeg; eog %s
+image/png; eog %s
+text/html; qutebrowser %s
