@@ -13,7 +13,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:monospace 8
+font pango:Monospace 9
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -26,17 +26,79 @@ font pango:monospace 8
 # X core fonts rendering does not support right-to-left and this being a bitmap
 # font, it doesn’t scale on retina/hidpi displays.
 
+# colors solarized light
+set $base3 #fdf6e3
+set $base2 #eee8d5
+set $base1 #93a1a1
+set $base0 #839496
+set $base00 #657b83
+set $base01 #586e75
+set $base02 #073642
+set $base03 #002b36
+set $red #dc322f
+set $orange #cb4b16
+set $yellow #b58900
+set $green #859900
+set $cyan #2aa198
+set $blue #268bd2
+set $violet #6c71c4
+set $magenta #d33682
+
+# class                  border  backgr. text    indicator child_border
+client.focused           $blue   $base2  $blue   $cyan     $base2
+client.unfocused         $base2  $base3  $base00 $cyan     $base2
+client.focused_inactive  $base2  $base2  $base01 $violet   $base2
+
+# Start i3bar to display a workspace bar (plus the system information i3status
+# finds out, if available)
+bar {
+        status_command i3status
+#        font pango:DejaVu Sans Mono for Powerline 10.5
+    colors {
+        focused_background $base2
+        background $base3
+        statusline $base0
+        separator $base1
+
+        # class            border  backgr. text
+        focused_workspace  $base2  $base2  $blue
+        active_workspace   $base2  $base2  $base00
+        inactive_workspace $base2  $base3  $base01
+        urgent_workspace   $base2  $red    $base00
+        binding_mode       $base2  $blue   $base00
+    }
+}
+
+workspace_layout tabbed
+
+# assign workspaces to outputs
+workspace "1: chat"         output eDP-1
+workspace "2: browser"      output HDMI-1
+workspace "3: mail"         output HDMI-1
+workspace "4: dev"          output HDMI-1
+workspace "5: dev"          output HDMI-1
+workspace "6: dev"          output HDMI-1
+workspace "7: media"        output HDMI-1
+workspace "8: tech"         output HDMI-1
+workspace "9: tracking"     output HDMI-1
+
+# assign windows to workspaces
+#assign [class="^Hamster$"] "9: tracking"
+
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec roxterm
+bindsym $mod+Return exec --no-startup-id termite
+
+# start slc hangout
+bindsym $mod+t exec chromium https://hangouts.google.com/call/3LfChD3qIh-LCWKFOEGIAEEI
 
 # kill focused window
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run
+bindsym $mod+d exec dmenu_run -nb "$base3" -nf "$base00" -sb "$base2" -sf "$blue" -p ">"
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
@@ -51,8 +113,8 @@ bindsym $mod+h focus left
 bindsym $mod+j focus down
 bindsym $mod+k focus up
 bindsym $mod+l focus right
-bindsym $mod+Prior focus left
-bindsym $mod+Next  focus right
+#bindsym $mod+Prior focus left
+#bindsym $mod+Next  focus right
 bindsym $mod+Tab focus right
 bindsym Mod1+Tab focus right
 
@@ -63,22 +125,22 @@ bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
 # move focused window
-bindsym $mod+Shift+h move left
-bindsym $mod+Shift+j move down
-bindsym $mod+Shift+k move up
-bindsym $mod+Shift+l move right
+bindsym $mod+Shift+h move left 50 px
+bindsym $mod+Shift+j move down 50 px
+bindsym $mod+Shift+k move up 50 px
+bindsym $mod+Shift+l move right 50 px
 
 # alternatively, you can use the cursor keys:
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
+bindsym $mod+Shift+Left move left 50 px
+bindsym $mod+Shift+Down move down 50 px
+bindsym $mod+Shift+Up move up 50 px
+bindsym $mod+Shift+Right move right 50 px
 
 # always wrap focus in current container
 force_focus_wrapping yes
 
 # split in horizontal orientation
-bindsym $mod+odiaeresis split h
+bindsym $mod+semicolon split h
 bindsym $mod+b split h
 
 # split in vertical orientation
@@ -88,9 +150,8 @@ bindsym $mod+v split v
 bindsym $mod+f fullscreen toggle
 
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+bindsym $mod+w layout stacked
+bindsym $mod+e layout toggle tabbed split
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
@@ -102,38 +163,42 @@ bindsym $mod+space focus mode_toggle
 bindsym $mod+a focus parent
 
 # focus the child container
-#bindsym $mod+d focus child
+bindsym $mod+Shift+a focus child
 
 # switch to workspace
-bindsym $mod+1 workspace 1
-bindsym $mod+2 workspace 2
-bindsym $mod+3 workspace 3
-bindsym $mod+4 workspace 4
-bindsym $mod+5 workspace 5
-bindsym $mod+6 workspace 6
-bindsym $mod+7 workspace 7
-bindsym $mod+8 workspace 8
-bindsym $mod+9 workspace 9
-bindsym $mod+0 workspace 10
+bindsym $mod+1 workspace 1: chat
+bindsym $mod+2 workspace 2: browser
+bindsym $mod+3 workspace 3: mail
+bindsym $mod+4 workspace 4: dev
+bindsym $mod+5 workspace 5: dev
+bindsym $mod+6 workspace 6: dev
+bindsym $mod+7 workspace 7: media
+bindsym $mod+8 workspace 8: tech
+bindsym $mod+9 workspace 9: tracking
+bindsym $mod+0 workspace 10: other
 
 # move focused container to workspace
-bindsym $mod+Shift+1 move container to workspace 1
-bindsym $mod+Shift+2 move container to workspace 2
-bindsym $mod+Shift+3 move container to workspace 3
-bindsym $mod+Shift+4 move container to workspace 4
-bindsym $mod+Shift+5 move container to workspace 5
-bindsym $mod+Shift+6 move container to workspace 6
-bindsym $mod+Shift+7 move container to workspace 7
-bindsym $mod+Shift+8 move container to workspace 8
-bindsym $mod+Shift+9 move container to workspace 9
-bindsym $mod+Shift+0 move container to workspace 10
+bindsym $mod+Shift+1 move container to workspace 1: chat
+bindsym $mod+Shift+2 move container to workspace 2: browser
+bindsym $mod+Shift+3 move container to workspace 3: mail
+bindsym $mod+Shift+4 move container to workspace 4: dev
+bindsym $mod+Shift+5 move container to workspace 5: dev
+bindsym $mod+Shift+6 move container to workspace 6: dev
+bindsym $mod+Shift+7 move container to workspace 7: media
+bindsym $mod+Shift+8 move container to workspace 8: tech
+bindsym $mod+Shift+9 move container to workspace 9: tracking
+bindsym $mod+Shift+0 move container to workspace 10: other
 
 # cycle through workspaces
-bindsym $mod+Shift+Prior workspace prev
-bindsym $mod+Shift+Next  workspace next
+bindsym $mod+Prior workspace prev
+bindsym $mod+Next  workspace next
 
 # switch back to last workspace when hitting switch key again
 workspace_auto_back_and_forth yes
+
+# switch back and forth between the last two worspaces
+bindsym $mod+numbersign workspace back_and_forth
+bindsym $mod+Shift+numbersign workspace back_and_forth
 
 # Move workspace to another output
 bindsym $mod+Shift+y move workspace to output down
@@ -145,6 +210,8 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+# lock screen
+bindsym $mod+Shift+z exec i3lock -i ~/Pictures/lock-screen-background.png -t -c 000000
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -174,40 +241,20 @@ bindsym $mod+r mode "resize"
 # Update xrandr
 bindsym $mod+m exec /home/reinhardt/bin/monitors_toggle.sh
 # Screenshot
-bindsym Print exec scrot '/tmp/%Y-%m-%d_$wx$h.png'
-
-# Start i3bar to display a workspace bar (plus the system information i3status
-# finds out, if available)
-bar {
-        status_command i3status
-}
-
-workspace_layout tabbed
-
-# assign workspaces to outputs
-workspace 1 output eDP-1
-workspace 2 output DP-1
-workspace 3 output DP-1
-workspace 4 output DP-1
-workspace 5 output DP-1
-workspace 6 output DP-1
-workspace 7 output DP-1
-workspace 8 output DP-1
-workspace 9 output DP-1
-
-# assign windows to workspaces
-assign [class="^Hamster$"] 9
-
-# Start these on login
-exec udiskie
-exec xbindkeys
-exec clipit
-exec gajim
-exec hexchat
-exec hamster
+bindsym Print exec scrot --focused '/tmp/%Y-%m-%dT%H:%M:%S_$wx$h.png'
+# Toggle Touchpad auto-disable
+bindsym $mod+Shift+s exec /home/reinhardt/bin/syndaemon_toggle.sh
 
 # Make the currently focused window a scratchpad
 bindsym $mod+Shift+minus move scratchpad
 
 # Show the first scratchpad window
 bindsym $mod+minus scratchpad show
+
+# Start these on login
+exec udiskie
+exec xbindkeys
+exec clipit
+bindsym $mod+Shift+n exec --no-startup-id i3-msg 'workspace "9: tracking"; exec hamster; workspace "8: tech"; exec termite -e /home/reinhardt/projects/chatterghost/chatterghost.sh; workspace "1: chat"; exec termite -e profanity; exec hexchat; exec signal-desktop; exec qutebrowser --restore chats'
+exec nitrogen --save --head=0 --random --set-zoom ~/Pictures/Wallpapers/Scotland/
+exec nitrogen --save --head=1 --random --set-zoom ~/Pictures/Wallpapers/Scotland/
