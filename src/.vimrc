@@ -1,25 +1,26 @@
 set nocompatible               " be iMproved
 filetype off                   " required!
 
-set rtp+=~/.vim/bundle/Vundle.vim/
+set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 " let Vundle manage Vundle
 " required! 
-Plugin 'gmarik/vundle'
+Plugin 'VundleVim/Vundle.vim'
 
 " My Plugins here:
 "
 " Plugin 'kevinw/pyflakes-vim'
 " Plugin 'msanders/snipmate.vim'
 " Plugin 'scrooloose/syntastic.git'
-Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'MarcWeber/vim-addon-mw-utils'  " dependency of vim-snipmate
+Plugin 'tomtom/tlib_vim'  " dependency of vim-snipmate
 Plugin 'garbas/vim-snipmate'
 Plugin 'honza/vim-snippets'
-Plugin 'tomtom/tlib_vim'
 Plugin 'Rykka/riv.vim'
 " Plugin 'alfredodeza/khuno.vim'
 Plugin 'altercation/vim-colors-solarized'
+Plugin 'lifepillar/vim-solarized8'
 Plugin 'limadm/vim-blues'
 Plugin 'ervandew/supertab'
 Plugin 'jamessan/vim-gnupg'
@@ -29,19 +30,25 @@ Plugin 'sjl/gundo.vim'
 Plugin 'mrtazz/simplenote.vim'
 " Plugin 'joonty/vdebug.git'
 Plugin 'klen/python-mode'
-Bundle 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plugin 'vim-airline/vim-airline'
+" Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'kana/vim-metarw'
 Plugin 'kana/vim-metarw-git'
 Plugin 'mattn/webapi-vim'
 Plugin 'mattn/vim-metarw-simplenote'
 Plugin 'blueyed/vim-diminactive'
 Plugin 'airblade/vim-gitgutter'
+Plugin 'tpope/vim-fugitive'
 
 call vundle#end()
 
+call metarw#define_wrapper_commands(0)
+
 source ~/.vim/simplenoterc
-" command! Daily Simplenote -o f704b70fc4ed65c4e19088821954f6ff
-command! Daily edit sn:f704b70fc4ed65c4e19088821954f6ff
+" command! Daily SimplenoteOpen f704b70fc4ed65c4e19088821954f6ff
+" command! Daily edit sn:f704b70fc4ed65c4e19088821954f6ff
+command! Daily edit ~/Notes/Daily.md
+command! Music edit sn:625a73545154fb1cc48db8bd34dfc9f1
 
 let s:email = 'askesemann@googlemail.com'
 
@@ -112,8 +119,6 @@ endfunction
 
 cnoremap <ESC><BS> <C-W>
 
-filetype on
-filetype plugin indent on
 let g:pydiction_location = '~/.vim/after/ftplugin/pydiction/complete-dict'
 set mouse=a
 set expandtab tabstop=4 shiftwidth=4 
@@ -121,29 +126,35 @@ set autoindent
 set wildmode=list:longest
 set hidden
 set laststatus=2
-set statusline=%F%m%r%h%w\ \ \ \ %=%02l,%02v\ of\ %L\ [%p%%]
+"set statusline=%F%m%r%h%w\ \ \ \ %=%02l,%02v\ of\ %L\ [%p%%]
 set backspace=indent,eol,start
 set number
+set nospell
+set spelllang=en
 " set textwidth=79
 set t_Co=256
-" if strftime("%H") < 10
-" " for sunny conditions
-" set background=light
-" colorscheme zellner
-" else
-set background=dark
-colorscheme blues
-hi! SpellBad cterm=underline ctermbg=235
-" endif
+set complete-=i
+set path=.,,parts/omelette/**,parts/packages/**,src/**,lib/**,/usr/include
+
+set termguicolors
+colorscheme solarized8_high
+if readfile("/home/reinhardt/.is_sunny")[0] == 1
+" for sunny conditions
+  set background=light
+  hi! ColorColumn term=reverse ctermbg=243 guibg=#eee8d5
+else
+  set background=dark
+  hi! SpellBad cterm=underline ctermbg=235
+endif
 highlight Normal ctermbg=none
 highlight Visual ctermbg=240
 highlight PyFlakes ctermbg=124
-highlight ColorColumn ctermbg=236 guibg=#eee8d5
 
-" let g:diminactive_use_syntax = 1
+filetype on
+filetype plugin indent on
 
-set spell
-set spelllang=en
+let g:diminactive_use_syntax = 0
+let g:diminactive_use_colorcolumn = 1
 
 let g:vdebug_options= {
 \    "port" : 9003,
@@ -180,11 +191,15 @@ let g:pymode_lint_cwindow = 0
 let g:pymode_rope_complete_on_dot = 0
 let g:pymode_rope = 0
 let g:pymode_trim_whitespaces = 0
+if has('nvim')
+    let g:pymode_python = 'python3'
+endif
 
 let g:netrw_localrmdir='rm -r'
 let g:netrw_keepdir=0
 
 if has("gui_running")
+"    set guifont=Monospace\ 12
     cmap <C-V>		<C-R>+
     exe 'inoremap <script> <C-V> <C-G>u' . paste#paste_cmd['i']
 endif
