@@ -39,6 +39,9 @@ Plugin 'mattn/vim-metarw-simplenote'
 Plugin 'blueyed/vim-diminactive'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
+Plugin 'LnL7/vim-nix'
+Plugin 'tpope/vim-abolish'
+Plugin 'ambv/black'
 
 call vundle#end()
 
@@ -135,6 +138,7 @@ set spelllang=en
 set t_Co=256
 set complete-=i
 set path=.,,parts/omelette/**,parts/packages/**,src/**,lib/**,/usr/include
+" autocmd BufReadPost *.py execute ':Black'
 
 set termguicolors
 colorscheme solarized8_high
