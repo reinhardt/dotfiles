@@ -15,6 +15,7 @@ export HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+export HISTSIZE=2000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -24,6 +25,12 @@ shopt -s checkwinsize
 #export LESSOPEN="| /usr/bin/lesspipe %s";
 #export LESSCLOSE="/usr/bin/lesspipe %s %s";
 
+hg_ps1() {
+    hg prompt " ({{branch}}{ {status}})" 2> /dev/null
+}
+export GIT_PS1_SHOWDIRTYSTATE=1
+source /home/reinhardt/bin/git-prompt.sh
+
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
@@ -31,7 +38,7 @@ fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
-    xterm-256color | xterm-color | xterm) color_prompt=yes;;
+   rxvt-unicode-256color | xterm-termite | xterm-256color | xterm-color | xterm) color_prompt=yes;;
 esac
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
@@ -51,20 +58,14 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    case "$HOSTNAME" in
-    starling|oira|unibw|recensio|lmu|pi)
+    if [[ -f ~/.pathcolor ]]; then
+        path_color=$(cat ~/.pathcolor);
+    else
         path_color='[01;35m'
-        ;;
-    floyd)
-        path_color='[01;96m'
-        ;;
-    *)
-        path_color='[01;34m'
-        ;;
-    esac
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033${path_color}\]\w\[\033[00m\]\$ '
+    fi
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033${path_color}\]\w\[\033[00m\]$(__git_ps1 " (%s)")$(hg_ps1)\$ '
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(__git_ps1 " (%s)")\$ '
 fi
 unset color_prompt force_color_prompt
 
@@ -79,6 +80,8 @@ esac
 
 # Add clock
 PS1="\[\033[1;36m\][\t] $PS1"
+
+#source /run/current-system/sw/lib/python2.7/site-packages/powerline/bindings/bash/powerline.sh
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
@@ -107,6 +110,7 @@ alias la='ls -A'
 #alias l='ls -CF'
 
 alias gr="grep -RI --exclude-dir=.svn --exclude-dir=.git"
+alias vim="nvim"
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -114,33 +118,35 @@ alias gr="grep -RI --exclude-dir=.svn --exclude-dir=.git"
 if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
+command -v jira >/dev/null && eval "$(jira --completion-script-bash)"
 
 #VMware config
 export VI_SERVER=192.168.201.230
 export VI_USER=root
 export VI_PASSWORD=
 
-export PYTHONPATH="/home/reinhardt/projects/powerline"
 export PYTHONSTARTUP="/home/reinhardt/.pythonrc"
 export LESS="R"
 
-export EDITOR="vim"
+export EDITOR="nvim"
+export TERMINAL="termite"
 
 [ -a /etc/profile.d/nix.sh ] && source /etc/profile.d/nix.sh
 export NIX_PATH=~/.nix-defexpr/channels
 
+if ! pgrep -x -u "${USER}" gpg-agent >/dev/null 2>&1; then
+    gpg-connect-agent /bye
+fi
 if [ -f "${HOME}/.gpg-agent-info" ]; then
   . "${HOME}/.gpg-agent-info"
   export GPG_AGENT_INFO
   export SSH_AUTH_SOCK
+  unset SSH_AGENT_PID
 fi
+#if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+#fi
 GPG_TTY=$(tty)
 export GPG_TTY
 
-if [[ $HOSTNAME == "starling" ]]; then
-    cd ~/webwork.deployment;
-elif [[ $HOSTNAME == "recensio" ]]; then
-    cd ~/recensio.deployment;
-elif [[ $HOSTNAME == "unibw" ]]; then
-    cd ~/unibw.deployment;
-fi
+if [[ -f ~/.initialdir ]]; then cd $(cat ~/.initialdir); fi
