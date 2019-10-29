@@ -1,0 +1,45 @@
+[user]
+	name = Manuel Reinhardt
+	email = reinhardt@syslab.com
+	signingkey = 7B8193C19AE60EE0
+[alias]
+	ci = commit
+[alias]
+    changelog = log --pretty='* %s [%cn]'
+[color]
+    status = always
+    diff = always
+[push]
+	default = simple
+[rebase]
+    stat = true
+[merge]
+	tool = vimdiff
+[diff "gpg"]
+	textconv = gpg --no-tty --decrypt
+[commit]
+	gpgSign = true
+
+# from http://stackoverflow.com/questions/2006351/gettext-po-files-under-version-control/11291001#11291001
+# more verbose than my minimal version
+[diff "msgcat"]
+    textconv = msgcat --no-location --no-wrap --sort-output
+
+# these diff defs use po_diff/pot_diff from https://github.com/alikins/gitconfig
+# change the 'diff' in .gitattributes to diff=po or diff=pot to use
+
+# convert po files to a less noisy
+# variant for display in git log -p etc
+# note that textconv does not affect
+# git-format-patch output
+[diff "po"]
+    textconv = po_diff
+    cachetextconv = true
+
+[diff "pot"]
+    textconv = pot_diff
+    # the lines it was picking for the "funcname"
+    # context were kind of terrible for this case, so
+    # just match a blank line so it's empty
+    xfuncname = ^$
+    cachetextconv = true
