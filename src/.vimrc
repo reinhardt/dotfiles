@@ -138,7 +138,6 @@ set spelllang=en
 set t_Co=256
 set complete-=i
 set path=.,,parts/omelette/**,parts/packages/**,src/**,lib/**,/usr/include
-" autocmd BufReadPost *.py execute ':Black'
 
 set termguicolors
 colorscheme solarized8_high
@@ -156,6 +155,10 @@ highlight PyFlakes ctermbg=124
 
 filetype on
 filetype plugin indent on
+
+" autocmd BufReadPost *.py execute ':Black'
+autocmd BufWritePost /home/reinhardt/projects/notes/_notes/*.md !/home/reinhardt/projects/notes/notes.sh
+autocmd BufWritePost /home/reinhardt/Notes/*.md !/home/reinhardt/projects/notes/notes.sh
 
 let g:diminactive_use_syntax = 0
 let g:diminactive_use_colorcolumn = 1

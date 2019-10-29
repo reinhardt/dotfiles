@@ -3,7 +3,7 @@
 #snippet ipdb
 #	import ipdb; ipdb.set_trace()
 snippet Test
-	import unittest2 as unittest
+	import unittest
 
 	class Test${1}(unittest.TestCase):
 		${2}
@@ -21,3 +21,7 @@ snippet __main
 		${1}
 snippet brk
 	from dbgp.client import brk; brk(host="localhost", port=9003)
+snippet registry
+	from plone.registry.interfaces import IRegistry
+	from zope.component import getUtility
+	registry = getUtility(IRegistry)
