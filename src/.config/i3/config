@@ -44,10 +44,10 @@ set $blue #268bd2
 set $violet #6c71c4
 set $magenta #d33682
 
-# class                  border  backgr. text    indicator child_border
-client.focused           $blue   $base2  $blue   $cyan     $base2
-client.unfocused         $base2  $base3  $base00 $cyan     $base2
-client.focused_inactive  $base2  $base2  $base01 $violet   $base2
+# class                  border   backgr.  text     indicator child_border
+client.focused           $magenta $magenta $base2   $orange   $base2
+client.unfocused         $base1   $base2   $base00  $magenta     $base2
+client.focused_inactive  $base1   $base3   $magenta $violet   $base2
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
@@ -61,11 +61,11 @@ bar {
         separator $base1
 
         # class            border  backgr. text
-        focused_workspace  $base2  $base2  $blue
-        active_workspace   $base2  $base2  $base00
-        inactive_workspace $base2  $base3  $base01
-        urgent_workspace   $base2  $red    $base00
-        binding_mode       $base2  $blue   $base00
+        focused_workspace  $magenta   $magenta   $base3
+        active_workspace   $base2  $base2  $magenta
+        inactive_workspace $base3  $base3  $base00
+        urgent_workspace   $red    $red    $base00
+        binding_mode       $cyan   $cyan   $base00
     }
 }
 
@@ -83,7 +83,9 @@ workspace "8: tech"         output HDMI-1
 workspace "9: tracking"     output HDMI-1
 
 # assign windows to workspaces
-#assign [class="^Hamster$"] "9: tracking"
+assign [class="^Hamster$" title="Time Tracker" tiling] "9: tracking"
+
+no_focus [class="^Firefox"]
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -104,6 +106,7 @@ bindsym $mod+d exec dmenu_run -nb "$base3" -nf "$base00" -sb "$base2" -sf "$blue
 # installed.
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 bindsym $mod+i exec connman_dmenu
+bindsym $mod+p exec passmenu
 
 # go online in Gajim
 bindsym $mod+o exec gajim-remote change_status online
@@ -115,8 +118,7 @@ bindsym $mod+k focus up
 bindsym $mod+l focus right
 #bindsym $mod+Prior focus left
 #bindsym $mod+Next  focus right
-bindsym $mod+Tab focus right
-bindsym Mod1+Tab focus right
+#bindsym $mod+Tab focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Left focus left
@@ -136,8 +138,10 @@ bindsym $mod+Shift+Down move down 50 px
 bindsym $mod+Shift+Up move up 50 px
 bindsym $mod+Shift+Right move right 50 px
 
-# always wrap focus in current container
-force_focus_wrapping yes
+# wrap focus?
+focus_wrapping no
+# always wrap focus in current container?
+force_focus_wrapping no
 
 # split in horizontal orientation
 bindsym $mod+semicolon split h
@@ -196,9 +200,8 @@ bindsym $mod+Next  workspace next
 # switch back to last workspace when hitting switch key again
 workspace_auto_back_and_forth yes
 
-# switch back and forth between the last two worspaces
-bindsym $mod+numbersign workspace back_and_forth
-bindsym $mod+Shift+numbersign workspace back_and_forth
+# switch back and forth between the last two workspaces
+bindsym $mod+Tab workspace back_and_forth
 
 # Move workspace to another output
 bindsym $mod+Shift+y move workspace to output down
@@ -251,10 +254,13 @@ bindsym $mod+Shift+minus move scratchpad
 # Show the first scratchpad window
 bindsym $mod+minus scratchpad show
 
+# Open chat windows
+bindsym $mod+Shift+n exec i3-msg "exec qutebrowser --restore chats"
+
 # Start these on login
 exec udiskie
 exec xbindkeys
 exec clipit
-bindsym $mod+Shift+n exec --no-startup-id i3-msg 'workspace "9: tracking"; exec hamster; workspace "8: tech"; exec termite -e /home/reinhardt/projects/chatterghost/chatterghost.sh; workspace "1: chat"; exec termite -e profanity; exec hexchat; exec signal-desktop; exec qutebrowser --restore chats'
-exec nitrogen --save --head=0 --random --set-zoom ~/Pictures/Wallpapers/Scotland/
-exec nitrogen --save --head=1 --random --set-zoom ~/Pictures/Wallpapers/Scotland/
+exec termite -e /home/reinhardt/projects/chatterghost/chatterghost.sh
+exec nitrogen --save --head=0 --set-zoom ~/.background.jpg
+exec nitrogen --save --head=1 --set-zoom ~/.background.jpg
