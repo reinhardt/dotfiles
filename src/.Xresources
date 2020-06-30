@@ -1,0 +1,129 @@
+Xft.dpi: 192
+Xcursor.theme: Obsidian
+Xcursor.size: 64
+
+XTerm*pointerSize: 96
+XTerm*pointerColor: rgb:dc/32/2f
+XTerm*pointerColorBackground: rgb:26/8b/d2
+XTerm*pointerShape: double_arrow
+XTerm.vt100.faceName: Monospace:size=8
+XTerm*cursorBlink: true
+XTerm*cursorOffTime: 300
+XTerm*cursorOnTime: 1800
+*foreground: rgb:65/7B/83
+*background: rgb:FD/F6/E3
+*color0: rgb:ee/e8/d5
+*color1: rgb:dc/32/2f
+*color2: rgb:85/99/00
+*color3: rgb:b5/89/00
+*color4: rgb:26/8b/d2
+*color5: rgb:d3/36/82
+*color6: rgb:2a/a1/98
+*color7: rgb:65/7b/83
+
+*color8: rgb:93/a1/a1
+*color9: rgb:dc/32/2f
+*color10: rgb:85/99/00
+*color11: rgb:b5/89/00
+*color12: rgb:26/8b/d2
+*color13: rgb:d3/36/82
+*color14: rgb:2a/a1/98
+*color15: rgb:58/6e/75
+
+!XTerm.vt100.color16: rgb:4C/4C/4C
+!XTerm.vt100.color17: rgb:A8/30/30
+!XTerm.vt100.color18: rgb:20/88/20
+!XTerm.vt100.color19: rgb:A8/88/00
+!XTerm.vt100.color20: rgb:55/55/98
+!XTerm.vt100.color21: rgb:88/30/88
+!XTerm.vt100.color22: rgb:30/88/88
+!XTerm.vt100.color23: rgb:D8/D8/D8
+
+XTerm.termName: xterm-256color
+XTerm.vt100.locale: true
+XTerm.vt100.metaSendsEscape: true
+XTerm.vt100.translations: #override \n\
+    Ctrl Shift <Key>C: copy-selection(CLIPBOARD) \n\
+    Ctrl Shift <Key>V: insert-selection(CLIPBOARD) \n\
+    Ctrl Shift <KeyPress> KP_Add: larger-vt-font() \n\
+    Ctrl Shift <KeyPress>=: smaller-vt-font()
+!XTerm.*backarrowKey: false
+!XTerm*ttyModes:         erase ^?
+!XTerm*VT100.translations: \
+!        #override <Key>BackSpace: string(0x7f) \n\
+!		          <Key>Delete:    string(0x1b) string("[3~")
+XTerm.vt100.saveLines: 16384
+XTerm.vt100.scrollBar: false
+
+URxvt.perl-ext-common: default,matcher,keyboard-select,vtwheel
+URxvt.keyboard-select.clipboard: true
+URxvt.clipboard.autocopy: true
+Rxvt.saveLines: 16384
+
+! do not scroll with output
+URxvt*scrollTtyOutput: false
+! scroll in relation to buffer (with mouse scroll or Shift+Page Up)
+URxvt*scrollWithBuffer: true
+! scroll back to the bottom on keypress
+URxvt*scrollTtyKeypress: true
+! disable the scrollback buffer for the secondary screen
+URxvt.secondaryScreen: 1
+URxvt.secondaryScroll: 0
+
+! Disable ISO 14755 unicode input so we can use Ctrl-Shift bindings
+URxvt.iso14755:        false
+URxvt.iso14755_52:     false
+
+! Bind Ctrl-Shift-c & Ctrl-Shift-v to copy and paste
+! I dont know why, but I needed to use hex keysym values to get it to work
+URxvt.keysym.Shift-Control-v: eval:paste_clipboard
+URxvt.keysym.Shift-Control-c: eval:selection_to_clipboard
+!URxvt.keysym.C-S-0x43: eval:selection_to_clipboard
+!URxvt.keysym.C-S-0x56: eval:paste_clipboard
+URxvt.keysym.M-s: searchable-scrollback:start
+URxvt.keysym.M-Escape: perl:keyboard-select:activate
+URxvt.keysym.M-C-1: command:\033]710;xft:Monospace:size=7\007
+URxvt.keysym.M-C-2: command:\033]710;xft:Monospace:size=9\007
+URxvt.keysym.M-C-3: command:\033]710;xft:Monospace:size=11\007
+URxvt.keysym.Control-Up: \033[1;5A
+URxvt.keysym.Control-Down: \033[1;5B
+URxvt.keysym.Control-Left: \033[1;5D
+URxvt.keysym.Control-Right: \033[1;5C
+
+URxvt.url-launcher: /run/current-system/sw/bin/xdg-open
+!URxvt.keysym.M-u: perl:url-select:select_next
+URxvt.keysym.M-u: matcher:select
+URxvt.keysym.M-i: matcher:list
+URxvt.matcher.button: 1
+URxvt.matcher.rend.0: Uline Bold fg5
+
+URxvt.shading: 8
+URxvt.transparent: false
+Rxvt.background: White
+!Rxvt.foreground: rgb:FF/FF/FF
+Rxvt.foreground: rgb:00/00/00
+Rxvt.font: xft:Monospace:size=9
+Rxvt.color0: rgb:2E2E/3434/3636
+Rxvt.color1: rgb:CCCC/0000/0000
+Rxvt.color2: rgb:4E4E/9A9A/0606
+Rxvt.color3: rgb:C4C4/A0A0/0000
+Rxvt.color4: rgb:3434/6565/A4A4
+Rxvt.color5: rgb:7575/5050/7B7B
+Rxvt.color6: rgb:0606/9898/9A9A
+Rxvt.color7: rgb:D3D3/D7D7/CFCF
+Rxvt.color8: rgb:5555/5757/5353
+Rxvt.color9: rgb:EFEF/2929/2929
+Rxvt.color10: rgb:8A8A/E2E2/3434
+Rxvt.color11: rgb:FCFC/E9E9/4F4F
+Rxvt.color12: rgb:7272/9F9F/CFCF
+Rxvt.color13: rgb:ADAD/7F7F/A8A8
+Rxvt.color14: rgb:3434/E2E2/E2E2
+Rxvt.color15: rgb:EEEE/EEEE/ECEC
+Rxvt.color16: rgb:4C4C/4C4C/4C4C
+Rxvt.color17: rgb:A8A8/3030/3030
+Rxvt.color18: rgb:2020/8888/2020
+Rxvt.color19: rgb:A8A8/8888/0000
+Rxvt.color20: rgb:5555/5555/9898
+Rxvt.color21: rgb:8888/3030/8888
+Rxvt.color22: rgb:3030/8888/8888
+Rxvt.color23: rgb:D8D8/D8D8/D8D8
