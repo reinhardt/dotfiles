@@ -1,7 +1,14 @@
 application/pdf; evince %s
 application/ms-tnef; tnef -C /tmp/ -w %s
+application/msword; libreoffice %s
+application/vnd.ms-excel; libreoffice %s
+application/vnd.oasis.opendocument.text; libreoffice %s
 application/vnd.openxmlformats-officedocument.presentationml.presentation; libreoffice %s
 application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; libreoffice %s
+application/vnd.openxmlformats-officedocument.wordprocessingml.document; libreoffice %s
 image/jpeg; eog %s
 image/png; eog %s
-text/html; qutebrowser %s
+image/gif; eog %s
+#text/html; firefox -no-remote -P alternative %s
+text/html; mv %s %s.html && qutebrowser %s.html >/dev/null 2>/dev/null; needsterminal;
+text/plain; nvim %s; needsterminal;

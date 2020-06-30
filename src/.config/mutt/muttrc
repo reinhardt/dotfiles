@@ -1,16 +1,19 @@
-source ~/.config/mutt/mutt-colors-solarized/mutt-colors-solarized-dark-256.muttrc
-#source /home/reinhardt/.config/mutt/mutt-colors-neonwolf/mutt-colors-neonwolf-256.muttrc
+source ~/.config/mutt/mutt-colors-current.muttrc
 source ~/.config/mutt/secrets.rc
 source ~/.config/mutt/gpg.rc
 source ~/.config/mutt/mutt-alias
 
 my_hdr From: Manuel Reinhardt <reinhardt@syslab.com>
 alternates '^reinhardt@syslab.com$'
+subscribe devel@syslab.com
+subscribe office@syslab.com
 set spoolfile="imaps://reinhardt\@syslab.com@sslin.df.eu/INBOX"
 set folder="imaps://reinhardt\@syslab.com@sslin.df.eu/INBOX"
 set record="="
 set postponed="=Drafts"
 set smtp_url="smtps://reinhardt\@syslab.com@sslout.df.eu"
+set include=yes
+set mime_forward=ask-yes
 
 # activate TLS if available on the server
 set ssl_starttls=yes
@@ -23,12 +26,13 @@ set imap_check_subscribed
 # Reduce polling frequency to a sane level
 set mail_check=60
 # keep a cache of headers for faster loading (1.5.9+?)
-set header_cache=~/.hcache
+set header_cache=~/.local/share/mutt/hcache
 # Display download progress every 5K
 set net_inc=5
 
+set quit=ask-yes
 set index_format="%4C %Z %{%b %d %R} %-15.15L (%?l?%4l&%4c?) %s"
-set sort=reverse-date
+set sort=reverse-threads
 bind editor <delete> delete-char
 set pager_index_lines=16
 
@@ -37,3 +41,14 @@ set query_command="abook --data-file ~/.config/mutt/mutt-alias --mutt-query '%s'
 macro index,pager A "<pipe-message>abook --add-email-quiet<return>" "add the sender address to abook"
 
 macro pager \cb <pipe-entry>'urlscan'<enter> 'Follow links with urlscan'
+
+# some exceptions to threaded sorting
+folder-hook . "set sort=reverse-threads"
+folder-hook '(Reports|proj|Mailing Lists\.(github|Plone Announce)|Mattermost|Trash)' "set sort=reverse-date-sent"
+
+# auto-delete old mails
+folder-hook '(Reports|proj|Mailing Lists\.(github|Plone Announce)|Mattermost)' 'push "<delete-pattern>~d >1m<enter>"'
+folder-hook '(Mailing Lists\.Star Alliance|Spam)' 'push "<delete-pattern>~d >1y<enter>"'
+
+set send_multipart_alternative=yes
+set send_multipart_alternative_filter="/home/reinhardt/bin/mutt-multipart-filter"
