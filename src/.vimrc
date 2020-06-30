@@ -41,13 +41,25 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
 Plugin 'LnL7/vim-nix'
 Plugin 'tpope/vim-abolish'
-Plugin 'ambv/black'
+Plugin 'psf/black'
+" Plugin 'paulkass/jira-vim'
+Plugin 'file:///home/reinhardt/projects/hamster/octodon'
+
+"let g:black_virtualenv = '/home/reinhardt/.local/pipx/venvs/black'
+
+let g:octodon_virtualenv = '/home/reinhardt/projects/hamster/octodon'
+python3 << endpython3
+sys.path.insert(0, "/home/reinhardt/projects/hamster/octodon/src")
+endpython3
+noremap <Leader>oc :OctodonClock<CR>
+noremap <Leader>os :OctodonTimeSum<CR>
 
 call vundle#end()
 
 call metarw#define_wrapper_commands(0)
 
 source ~/.vim/simplenoterc
+source ~/.vim/jiravimrc
 " command! Daily SimplenoteOpen f704b70fc4ed65c4e19088821954f6ff
 " command! Daily edit sn:f704b70fc4ed65c4e19088821954f6ff
 command! Daily edit ~/Notes/Daily.md
@@ -57,10 +69,11 @@ let s:email = 'askesemann@googlemail.com'
 
 noremap <silent> <Leader>w :call ToggleWrap()<CR>
 function! SetWrap(value)
-  if a:value
-    setlocal wrap linebreak nolist
+  if a:value == "soft"
+    setlocal wrap linebreak
     setlocal textwidth=0
     setlocal display+=lastline
+    setlocal formatoptions-=a
     noremap  <buffer> <silent> k gk
     noremap  <buffer> <silent> j gj
     noremap  <buffer> <silent> 0 g0
@@ -74,8 +87,14 @@ function! SetWrap(value)
     inoremap <buffer> <silent> <Home> <C-o>g<Home>
     inoremap <buffer> <silent> <End>  <C-o>g<End>
   else
-    setlocal nowrap
-    setlocal textwidth=79
+    if a:value == "hard"
+      setlocal formatoptions+=a
+      setlocal textwidth=88
+    else
+      setlocal formatoptions-=a
+      setlocal textwidth=0
+    endif
+    setlocal nowrap nolinebreak
     silent! nunmap <buffer> <Up>
     silent! nunmap <buffer> <Down>
     silent! nunmap <buffer> <Home>
@@ -92,16 +111,19 @@ function! SetWrap(value)
 endfunction
 
 function! ToggleWrap()
-  if &wrap
-    echo "Wrap OFF"
-    call SetWrap(0)
+  if &wrap  " soft wrap is on
+    echo "Wrap HARD"
+    call SetWrap("hard")
   else
-    echo "Wrap ON"
-    call SetWrap(1)
+    if &formatoptions =~ "a"  " hard wrap is on
+      echo "Wrap OFF"
+      call SetWrap("off")
+    else  " wrap is off
+      echo "Wrap SOFT"
+      call SetWrap("soft")
+    endif
   endif
 endfunction
-
-call SetWrap(1)
 
 noremap <silent> <Leader>s :call ToggleSpell()<CR>
 function! ToggleSpell()
@@ -120,7 +142,15 @@ function! ToggleSpell()
   endif
 endfunction
 
+noremap <Leader>b :let @+="b " . expand("%:p") . ":" . line(".")<CR>
+
 cnoremap <ESC><BS> <C-W>
+
+tnoremap <C-w> <C-\><C-n>
+
+function! ZPretty(type)
+    execute ':%!/home/reinhardt/.vim/zpretty/bin/zpretty'
+endfunction
 
 let g:pydiction_location = '~/.vim/after/ftplugin/pydiction/complete-dict'
 set mouse=a
@@ -134,31 +164,48 @@ set backspace=indent,eol,start
 set number
 set nospell
 set spelllang=en
-" set textwidth=79
+set textwidth=88
+set nowrap
+set nolinebreak
+set nojoinspaces
 set t_Co=256
 set complete-=i
-set path=.,,parts/omelette/**,parts/packages/**,src/**,lib/**,/usr/include
+set path=.,,parts/omelette/**,parts/packages/**,src/**,dev/**,lib/**,/usr/include
+set splitright
+set splitbelow
+set cursorline
+set nocursorcolumn
 
-set termguicolors
+"set termguicolors
 colorscheme solarized8_high
-if readfile("/home/reinhardt/.is_sunny")[0] == 1
-" for sunny conditions
-  set background=light
-  hi! ColorColumn term=reverse ctermbg=243 guibg=#eee8d5
-else
-  set background=dark
-  hi! SpellBad cterm=underline ctermbg=235
-endif
-highlight Normal ctermbg=none
-highlight Visual ctermbg=240
-highlight PyFlakes ctermbg=124
+set background=light
+"if readfile("/home/reinhardt/.is_sunny")[0] == 1
+"" for sunny conditions
+"  set background=light
+"  hi! ColorColumn term=reverse ctermbg=243 guibg=#eee8d5
+"else
+"  set background=dark
+"  hi! SpellBad cterm=underline ctermbg=235
+"endif
+"highlight Normal ctermbg=none  " does not work reliably, modify colorscheme instead
+"highlight Visual ctermbg=240
+"highlight PyFlakes ctermbg=124
 
 filetype on
 filetype plugin indent on
 
-" autocmd BufReadPost *.py execute ':Black'
-autocmd BufWritePost /home/reinhardt/projects/notes/_notes/*.md !/home/reinhardt/projects/notes/notes.sh
-autocmd BufWritePost /home/reinhardt/Notes/*.md !/home/reinhardt/projects/notes/notes.sh
+autocmd BufWritePre src/*.py execute ':Black'
+autocmd BufWritePre src/*.pt execute ':%!/home/reinhardt/.vim/zpretty/bin/zpretty'
+autocmd BufWritePre src/*.zcml execute ':%!/home/reinhardt/.vim/zpretty/bin/zpretty --zcml'
+autocmd BufWritePre src/*.xml execute ':%!/home/reinhardt/.vim/zpretty/bin/zpretty --xml'
+autocmd TermOpen * setlocal numberwidth=7
+autocmd BufWritePost /home/reinhardt/projects/notes/_notes/*.md call jobstart('/home/reinhardt/projects/notes/notes.sh', {'detach': 1})
+autocmd BufWritePost /home/reinhardt/Notes/*.md call jobstart('/home/reinhardt/projects/notes/notes.sh', {'detach': 1})
+
+"if has("nvim-0.4.2")
+"    autocmd TermEnter * setlocal nonumber
+"    autocmd TermLeave * setlocal number
+"endif
 
 let g:diminactive_use_syntax = 0
 let g:diminactive_use_colorcolumn = 1
@@ -198,12 +245,19 @@ let g:pymode_lint_cwindow = 0
 let g:pymode_rope_complete_on_dot = 0
 let g:pymode_rope = 0
 let g:pymode_trim_whitespaces = 0
+let g:pymode_options_max_line_length = 88
+let g:pymode_breakpoint_bind = ""
 if has('nvim')
     let g:pymode_python = 'python3'
 endif
 
 let g:netrw_localrmdir='rm -r'
-let g:netrw_keepdir=0
+let g:netrw_keepdir=1
+let g:netrw_localcopycmdopt=" -R"
+let g:netrw_liststyle=2
+let g:netrw_banner=0
+
+noremap - :Explore<CR>
 
 if has("gui_running")
 "    set guifont=Monospace\ 12

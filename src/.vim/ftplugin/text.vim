@@ -1,2 +1,3 @@
-call SetWrap(1)
+call SetWrap("soft")
 setlocal spell
+setlocal nojs

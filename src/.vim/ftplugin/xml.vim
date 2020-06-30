@@ -1,2 +1,2 @@
-call SetWrap(1)
+call SetWrap("off")
 setlocal nospell

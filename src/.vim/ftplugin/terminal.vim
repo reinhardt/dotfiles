@@ -1,2 +1,2 @@
 setlocal nospell
-setlocal nonumber
+setlocal numberwidth=8
