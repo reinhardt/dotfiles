@@ -15,7 +15,7 @@ export HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-export HISTSIZE=2000
+export HISTSIZE=8000
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -38,7 +38,7 @@ fi
 
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
-   rxvt-unicode-256color | xterm-termite | xterm-256color | xterm-color | xterm) color_prompt=yes;;
+   rxvt-unicode-256color | xterm-termite | xterm-256color | xterm-color | xterm | screen-256color-bce | screen-256color) color_prompt=yes;;
 esac
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
@@ -63,23 +63,11 @@ if [ "$color_prompt" = yes ]; then
     else
         path_color='[01;35m'
     fi
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033${path_color}\]\w\[\033[00m\]$(__git_ps1 " (%s)")$(hg_ps1)\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033${path_color}\]\w\[\033[00m\]$(__git_ps1 " (%s)")$(hg_ps1)\n\[\033[1;36m\][\t]\[\033[00m\]\$ '
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(__git_ps1 " (%s)")\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(__git_ps1 " (%s)")\n\[\t]\$ '
 fi
 unset color_prompt force_color_prompt
-
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
-
-# Add clock
-PS1="\[\033[1;36m\][\t] $PS1"
 
 #source /run/current-system/sw/lib/python2.7/site-packages/powerline/bindings/bash/powerline.sh
 
@@ -129,10 +117,11 @@ export PYTHONSTARTUP="/home/reinhardt/.pythonrc"
 export LESS="R"
 
 export EDITOR="nvim"
-export TERMINAL="termite"
+export TERMINAL="xterm"
 
 [ -a /etc/profile.d/nix.sh ] && source /etc/profile.d/nix.sh
-export NIX_PATH=~/.nix-defexpr/channels
+#export NIX_PATH=~/.nix-defexpr/channels
+#export NIX_PATH=$NIX_PATH:/nix/var/nix/profiles/per-user/root/channels/nixos
 
 if ! pgrep -x -u "${USER}" gpg-agent >/dev/null 2>&1; then
     gpg-connect-agent /bye
@@ -148,5 +137,7 @@ fi
 #fi
 GPG_TTY=$(tty)
 export GPG_TTY
+
+export PASSWORD_STORE_GENERATED_LENGTH=32
 
 if [[ -f ~/.initialdir ]]; then cd $(cat ~/.initialdir); fi
