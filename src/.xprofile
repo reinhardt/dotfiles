@@ -1,0 +1,7 @@
+xset -b
+#xrandr --dpi 192
+xrdb ~/.Xresources
+export QT_SCALE_FACTOR=0.8
+export GDK_SCALE=0.8
+export GDK_DPI_SCALE=0.8
+export CM_SELECTIONS="clipboard"
