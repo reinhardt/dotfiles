@@ -63,7 +63,12 @@ if [ "$color_prompt" = yes ]; then
     else
         path_color='[01;35m'
     fi
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033${path_color}\]\w\[\033[00m\]$(__git_ps1 " (%s)")$(hg_ps1)\n\[\033[1;36m\][\t]\[\033[00m\]\$ '
+    if [[ -f ~/.namecolor ]]; then
+        name_color=$(cat ~/.namecolor);
+    else
+        name_color='[01;32m'
+    fi
+    PS1='${debian_chroot:+($debian_chroot)}\[\033${name_color}\]\u@\h\[\033[00m\]:\[\033${path_color}\]\w\[\033[00m\]$(__git_ps1 " (%s)")$(hg_ps1)\n\[\033[1;36m\][\t]\[\033[00m\]\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(__git_ps1 " (%s)")\n\[\t]\$ '
 fi
