@@ -43,3 +43,5 @@
     # just match a blank line so it's empty
     xfuncname = ^$
     cachetextconv = true
+[gpg]
+	program = gpg2
