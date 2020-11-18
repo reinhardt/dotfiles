@@ -87,7 +87,7 @@ unset color_prompt force_color_prompt
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
-    eval "`dircolors -b`"
+    eval "`dircolors -b ~/.config/dircolors`"
     alias ls='ls --color=auto'
     #alias dir='dir --color=auto'
     #alias vdir='vdir --color=auto'
@@ -122,6 +122,7 @@ export PYTHONSTARTUP="/home/reinhardt/.pythonrc"
 export LESS="R"
 
 export EDITOR="nvim"
+export VISUAL="nvim"
 export TERMINAL="xterm"
 
 [ -a /etc/profile.d/nix.sh ] && source /etc/profile.d/nix.sh
