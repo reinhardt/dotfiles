@@ -1,3 +1,4 @@
+source ~/.profile
 xset -b
 #xrandr --dpi 192
 xrdb ~/.Xresources
