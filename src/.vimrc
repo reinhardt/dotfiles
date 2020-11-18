@@ -149,7 +149,14 @@ cnoremap <ESC><BS> <C-W>
 tnoremap <C-w> <C-\><C-n>
 
 function! ZPretty(type)
-    execute ':%!/home/reinhardt/.vim/zpretty/bin/zpretty'
+    let save_pos = getpos(".")
+    if a:type == 'pt'
+        let l:params = ''
+    else
+        let l:params = ' --' . a:type
+    endif
+    execute ':silent %!/home/reinhardt/.vim/zpretty/bin/zpretty' . l:params
+    call setpos('.', save_pos)
 endfunction
 
 let g:pydiction_location = '~/.vim/after/ftplugin/pydiction/complete-dict'
@@ -164,7 +171,7 @@ set backspace=indent,eol,start
 set number
 set nospell
 set spelllang=en
-set textwidth=88
+set textwidth=0
 set nowrap
 set nolinebreak
 set nojoinspaces
@@ -194,10 +201,35 @@ set background=light
 filetype on
 filetype plugin indent on
 
-autocmd BufWritePre src/*.py execute ':Black'
-autocmd BufWritePre src/*.pt execute ':%!/home/reinhardt/.vim/zpretty/bin/zpretty'
-autocmd BufWritePre src/*.zcml execute ':%!/home/reinhardt/.vim/zpretty/bin/zpretty --zcml'
-autocmd BufWritePre src/*.xml execute ':%!/home/reinhardt/.vim/zpretty/bin/zpretty --xml'
+let g:autoformat = 1
+function SetAutoFormat(value)
+    if a:value
+        autocmd BufWritePre *.py execute ':Black'
+        autocmd BufWritePre *.pt call ZPretty('pt')
+        autocmd BufWritePre *.zcml call ZPretty('zcml')
+        autocmd BufWritePre *.xml call ZPretty('xml')
+        let g:autoformat = 1
+    else
+        autocmd! BufWritePre *.py
+        autocmd! BufWritePre *.pt
+        autocmd! BufWritePre *.zcml
+        autocmd! BufWritePre *.xml
+        let g:autoformat = 0
+    endif
+endfunction
+call SetAutoFormat(1)
+
+noremap <silent> <Leader>f :call ToggleAutoFormat()<CR>
+function! ToggleAutoFormat()
+    if g:autoformat
+        echo "Autoformat off"
+        call SetAutoFormat(0)
+    else
+        echo "Autoformat on"
+        call SetAutoFormat(1)
+    endif
+endfunction
+
 autocmd TermOpen * setlocal numberwidth=7
 autocmd BufWritePost /home/reinhardt/projects/notes/_notes/*.md call jobstart('/home/reinhardt/projects/notes/notes.sh', {'detach': 1})
 autocmd BufWritePost /home/reinhardt/Notes/*.md call jobstart('/home/reinhardt/projects/notes/notes.sh', {'detach': 1})
@@ -252,9 +284,9 @@ if has('nvim')
 endif
 
 let g:netrw_localrmdir='rm -r'
-let g:netrw_keepdir=1
+let g:netrw_keepdir=0
 let g:netrw_localcopycmdopt=" -R"
-let g:netrw_liststyle=2
+let g:netrw_liststyle=1
 let g:netrw_banner=0
 
 noremap - :Explore<CR>
