@@ -29,7 +29,7 @@ hg_ps1() {
     hg prompt " ({{branch}}{ {status}})" 2> /dev/null
 }
 export GIT_PS1_SHOWDIRTYSTATE=1
-source /home/reinhardt/bin/git-prompt.sh
+source /home/reinhardt/.local/bin/git-prompt.sh
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
@@ -103,7 +103,7 @@ alias la='ls -A'
 #alias l='ls -CF'
 
 alias gr="grep -RI --exclude-dir=.svn --exclude-dir=.git"
-alias vim="nvim"
+alias open="xdg-open"
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile

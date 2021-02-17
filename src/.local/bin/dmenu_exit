@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+ACTION=$(echo "poweroff
+reboot
+exit
+cancel" | dmenu)
+case $ACTION in
+    poweroff )
+        poweroff ;;
+    reboot )
+        systemctl reboot ;;
+    exit )
+        i3-msg exit ;;
+esac

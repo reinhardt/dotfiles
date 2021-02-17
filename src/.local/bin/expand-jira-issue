@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+while read line; do
+    ISSUE="";
+    if ! echo $line | grep -q "^[0-9]\{4\}"; then
+        line=$(date +%H%M)" "$line;
+    fi
+    if echo $line | grep -q "[A-Z]\+-[0-9]\+"; then
+        ISSUE=$(echo "$line" | sed -e "s/.* \([A-Z]\+-[0-9]\+\).*/\1/");
+    fi
+    if [[ $ISSUE != "" ]]; then
+        FULL=$(jira list --template=list-medium --query="issue=${ISSUE}");
+        if [[ $FULL == ${ISSUE}* ]]; then
+            line=$(echo $line | sed -e "s/${ISSUE}/${FULL}/g");
+        else
+            echo $FULL > /dev/stderr
+        fi
+    fi
+    echo $line
+done < /dev/stdin

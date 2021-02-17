@@ -1,0 +1,2 @@
+#!/run/current-system/sw/bin/bash
+~/bin/terminal -e /run/current-system/sw/bin/nvim $@

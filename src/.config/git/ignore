@@ -1,7 +1,7 @@
 *.sw[op]
 *.pyc
 pip-selfcheck.json
-bin
+/bin
 include
 lib
 share

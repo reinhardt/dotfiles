@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+if [[ $(date -r ~/Notes/Daily.md +%F) != $(date +%F) ]]; then
+    cp ~/Notes/Daily.md ~/Notes/Daily.md.bak;
+    cp ~/Notes/Daily.md.tmpl ~/Notes/Daily.md;
+fi
+nvim -f ~/Notes/Daily.md -c "normal 7G"

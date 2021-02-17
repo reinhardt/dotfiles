@@ -1,0 +1,8 @@
+#!/bin/sh
+i3status | while :
+do
+        read LINE
+        OCTODON_SUMMARY=$(timeout 5s octodon --new-session --date=+0 total)
+        OCTODON_CURRENT=$(tail -n 1 $(ls -t ~/Timetracking/*/* | head -n 1))
+        echo "$OCTODON_CURRENT | $OCTODON_SUMMARY | $LINE" || exit 1
+done
