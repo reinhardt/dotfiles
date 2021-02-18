@@ -1,0 +1,7 @@
+body.template-sharing form input[type=checkbox],
+body.template-usergroup-groupprefs form input[type=checkbox],
+body.portaltype-plone-site form input[type=checkbox] {
+    appearance: checkbox;
+    -webkit-appearance: checkbox;
+    -moz-appearance: checkbox;
+}
