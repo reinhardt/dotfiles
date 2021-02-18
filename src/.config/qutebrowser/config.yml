@@ -1,0 +1,53 @@
+window.title_format: "{perc}{current_title}{title_sep}qutebrowser ({backend})"
+url.start_pages: ['http://joy/notes/Today.html']
+url.default_page: 'http://joy/notes/Today.html'
+new_instance_open_target: 'window'
+content.notifications: true
+content.plugins: true
+content.user_stylesheets: ['quaive.css']
+completion.cmd_history_max_items: 500
+#editor.command: ["atom", "-f", "{file}"]
+editor.command: ["terminal", "-e", "/run/current-system/sw/bin/nvim -c 'set ft=text|normal {line}G{column0}l' {file}"]
+tabs:
+  background: true
+  select_on_remove: last-used
+  #XXX Why does this not work? Currently set in config.py
+  #padding:
+  #  bottom: 3
+  #  left: 5
+  #  right: 5
+  #  top: 2
+#colors:
+#  statusbar:
+#    url:
+#      fg: "grey"
+#      success.http.fg: "yellow"
+#      success.https.fg: "lime"
+#    insert:
+#      fg: "darkblue"
+#      bg: "cyan"
+#  tabs:
+#    odd:
+#      fg: "grey"
+#      bg: "#222222"
+#    even:
+#      fg: "grey"
+#      bg: "#222222"
+#    selected:
+#      odd:
+#        fg: "black"
+#        bg: "white"
+#      even:
+#        fg: "black"
+#        bg: "white"
+qt.highdpi: true
+zoom.default: 100%
+fonts:
+  web.family.fixed: "Terminus, Monospace, \"DejaVu Sans Mono\", Monaco, \"Bitstream Vera Sans Mono\", \"Andale Mono\", \"Courier New\", Courier, \"Liberation Mono\", monospace, Fixed, Consolas, Terminal"
+  prompts: 10pt "Terminus, Monospace, \"DejaVu Sans Mono\", Monaco, \"Bitstream Vera Sans Mono\", \"Andale Mono\", \"Courier New\", Courier, \"Liberation Mono\", monospace, Fixed, Consolas, Terminal"
+  statusbar: 10pt "Terminus, Monospace, \"DejaVu Sans Mono\", Monaco, \"Bitstream Vera Sans Mono\", \"Andale Mono\", \"Courier New\", Courier, \"Liberation Mono\", monospace, Fixed, Consolas, Terminal"
+#  tabs: 10pt monospace
+  statusbar: 10pt monospace
+  hints: bold 10pt monospace
+  completion.entry: 10pt monospace
+  completion.category: bold 10pt monospace
