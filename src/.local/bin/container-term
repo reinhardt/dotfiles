@@ -3,8 +3,11 @@ HOST=$(echo $0 | sed -e 's/.*\/\(.*\)-term$/\1/')
 if [[ $(sudo nixos-container status $HOST) == "down" ]]; then
     sudo nixos-container start $HOST;
 fi
+export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+sshfs $HOST:/srv/$HOST /srv/$HOST
 terminal -e "ssh -t $HOST \"tmux new\"";
-if ! ps -C ssh -fww | grep -q $HOST; then
+if ! ps -C ssh -fww | grep $HOST | grep -q tmux; then
+    fusermount -u /srv/$HOST;
     sudo nixos-container stop $HOST;
     notify-send "Shut down" "Shut down container $HOST";
 fi
