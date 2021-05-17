@@ -45,7 +45,6 @@ with subprocess.Popen(
             stdout=subprocess.PIPE,
             shell=True,
         ).stdout
-        # octodon_summary = "x"
         octodon_summary = " {} ".format(octodon_summary.decode("utf-8").strip())
 
         tracking_files = os.listdir(TRACKING_DIR)
