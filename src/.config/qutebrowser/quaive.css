@@ -5,3 +5,7 @@ body.portaltype-plone-site form input[type=checkbox] {
     -webkit-appearance: checkbox;
     -moz-appearance: checkbox;
 }
+.hovermq body {
+    user-select: initial;
+    -webkit-user-select: initial;
+}

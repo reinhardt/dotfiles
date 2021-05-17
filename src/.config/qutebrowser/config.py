@@ -1,5 +1,8 @@
 import yaml
 
+c = locals()["c"]
+config = locals()["config"]
+
 # TODO: import from other file
 # Solarized Light scheme by Ethan Schoonover
 
@@ -19,6 +22,8 @@ s_cyan = "#2aa198"
 s_blue = "#268bd2"
 s_violet = "#6c71c4"
 s_magenta = "#d33682"
+
+accent = "#6c71c4"
 
 # set qutebrowser colors
 
@@ -72,13 +77,13 @@ c.colors.downloads.bar.bg = base3
 c.colors.downloads.start.fg = base3
 
 # Color gradient start for download backgrounds.
-c.colors.downloads.start.bg = s_blue
+c.colors.downloads.start.bg = base3
 
 # Color gradient end for download text.
 c.colors.downloads.stop.fg = base3
 
 # Color gradient stop for download backgrounds.
-c.colors.downloads.stop.bg = s_cyan
+c.colors.downloads.stop.bg = accent
 
 # Foreground color for downloads with errors.
 c.colors.downloads.error.fg = s_red
@@ -203,11 +208,11 @@ c.colors.statusbar.url.hover.fg = base01
 
 # Foreground color of the URL in the statusbar on successful load
 # (http).
-c.colors.statusbar.url.success.http.fg = s_cyan
+c.colors.statusbar.url.success.http.fg = base01
 
 # Foreground color of the URL in the statusbar on successful load
 # (https).
-c.colors.statusbar.url.success.https.fg = base00
+c.colors.statusbar.url.success.https.fg = base01
 
 # Foreground color of the URL in the statusbar when there's a warning.
 c.colors.statusbar.url.warn.fg = s_violet
@@ -216,10 +221,10 @@ c.colors.statusbar.url.warn.fg = s_violet
 c.colors.tabs.bar.bg = base3
 
 # Color gradient start for the tab indicator.
-c.colors.tabs.indicator.start = s_blue
+c.colors.tabs.indicator.start = base3
 
 # Color gradient end for the tab indicator.
-c.colors.tabs.indicator.stop = s_cyan
+c.colors.tabs.indicator.stop = base0
 
 # Color for the tab indicator on errors.
 c.colors.tabs.indicator.error = s_red
@@ -240,13 +245,13 @@ c.colors.tabs.even.bg = base3
 c.colors.tabs.selected.odd.fg = base3
 
 # Background color of selected odd tabs.
-c.colors.tabs.selected.odd.bg = s_cyan
+c.colors.tabs.selected.odd.bg = accent
 
 # Foreground color of selected even tabs.
 c.colors.tabs.selected.even.fg = base3
 
 # Background color of selected even tabs.
-c.colors.tabs.selected.even.bg = s_cyan
+c.colors.tabs.selected.even.bg = accent
 
 # Background color for webpages if unset (or empty to use the theme's
 # color).
@@ -290,6 +295,8 @@ config.set(
 
 config.bind("L", "tab-next")
 config.bind("H", "tab-prev")
+config.bind("gl", "tab-move -")
+config.bind("gh", "tab-move +")
 config.bind("<ctrl-l>", "tab-next")
 config.bind("<ctrl-h>", "tab-prev")
 config.bind("J", "forward")
@@ -297,6 +304,8 @@ config.bind("K", "back")
 config.unbind("d")
 config.bind("D", "tab-close")
 config.bind(
-    "<Escape>", "leave-mode ;; jseval -q document.activeElement.blur()", mode="insert"
+    "<Escape>", "mode-leave ;; jseval -q document.activeElement.blur()", mode="insert"
 )
 config.bind(",p", "spawn --userscript qute-pass --dmenu-invocation dmenu")
+
+config.load_autoconfig()

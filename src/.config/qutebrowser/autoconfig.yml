@@ -6,5 +6,29 @@
 
 config_version: 2
 settings:
-  content.media_capture:
+  bindings.commands:
+    global:
+      insert:
+        <Escape>: mode-leave ;; jseval -q document.activeElement.blur()
+      normal:
+        ',p': spawn --userscript qute-pass --dmenu-invocation dmenu
+        <Ctrl+h>: tab-prev
+        <Ctrl+l>: tab-next
+        D: tab-close
+        H: tab-prev
+        J: forward
+        K: back
+        L: tab-next
+        d: null
+        gl: tab-move -
+        gr: tab-move +
+  content.geolocation:
+    https://www.lieferando.de: false
+  content.media.audio_capture:
     https://meet.jit.si: true
+  content.media.audio_video_capture:
+    https://meet.jit.si: true
+  content.media.video_capture:
+    https://meet.jit.si: true
+  content.site_specific_quirks.enabled:
+    global: true
