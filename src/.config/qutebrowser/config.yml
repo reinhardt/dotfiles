@@ -2,7 +2,7 @@ window.title_format: "{perc}{current_title}{title_sep}qutebrowser ({backend})"
 url.start_pages: ['http://joy/notes/Today.html']
 url.default_page: 'http://joy/notes/Today.html'
 new_instance_open_target: 'window'
-content.notifications: true
+content.notifications.enabled: true
 content.plugins: true
 content.user_stylesheets: ['quaive.css']
 completion.cmd_history_max_items: 500
