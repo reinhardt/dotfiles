@@ -44,11 +44,11 @@ macro pager \cb <pipe-entry>'urlscan'<enter> 'Follow links with urlscan'
 
 # some exceptions to threaded sorting
 folder-hook . "set sort=reverse-threads"
-folder-hook '(Reports|proj|Mailing Lists\.(github|Plone Announce)|Mattermost|Trash)' "set sort=reverse-date-sent"
+folder-hook '(Reports|proj|Mailing Lists\.github|Mattermost|Trash)' "set sort=reverse-date-sent"
 
 # auto-delete old mails
-folder-hook '(Reports|proj|Mailing Lists\.(github|Plone Announce)|Mattermost)' 'push "<delete-pattern>~d >1m<enter>"'
+folder-hook '(Reports|proj|Mailing Lists(|\.github)|Mattermost)' 'push "<delete-pattern>~d >1m<enter>"'
 folder-hook '(Mailing Lists\.Star Alliance|Spam)' 'push "<delete-pattern>~d >1y<enter>"'
 
 set send_multipart_alternative=yes
-set send_multipart_alternative_filter="/home/reinhardt/bin/mutt-multipart-filter"
+set send_multipart_alternative_filter="mutt-multipart-filter"
