@@ -15,7 +15,7 @@ export HISTCONTROL=ignoreboth
 shopt -s histappend
 
 # for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-export HISTSIZE=8000
+export HISTSIZE=16384
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -29,7 +29,6 @@ hg_ps1() {
     hg prompt " ({{branch}}{ {status}})" 2> /dev/null
 }
 export GIT_PS1_SHOWDIRTYSTATE=1
-source /home/reinhardt/.local/bin/git-prompt.sh
 
 # set variable identifying the chroot you work in (used in the prompt below)
 if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
@@ -113,12 +112,7 @@ if [ -f /etc/bash_completion ]; then
 fi
 command -v jira >/dev/null && eval "$(jira --completion-script-bash)"
 
-#VMware config
-export VI_SERVER=192.168.201.230
-export VI_USER=root
-export VI_PASSWORD=
-
-export PYTHONSTARTUP="/home/reinhardt/.pythonrc"
+export PYTHONSTARTUP="~/.pythonrc"
 export LESS="R"
 
 export EDITOR="nvim"
@@ -132,17 +126,8 @@ export TERMINAL="xterm"
 if ! pgrep -x -u "${USER}" gpg-agent >/dev/null 2>&1; then
     gpg-connect-agent /bye
 fi
-if [ -f "${HOME}/.gpg-agent-info" ]; then
-  . "${HOME}/.gpg-agent-info"
-  export GPG_AGENT_INFO
-  export SSH_AUTH_SOCK
-  unset SSH_AGENT_PID
-fi
-#if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
-  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
-#fi
-GPG_TTY=$(tty)
-export GPG_TTY
+export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+export GPG_TTY=$(tty)
 
 export PASSWORD_STORE_GENERATED_LENGTH=32
 
