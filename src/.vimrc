@@ -1,6 +1,10 @@
 set nocompatible               " be iMproved
 filetype off                   " required!
 
+if filereadable(glob('~/.vimrc.local'))
+    source ~/.vimrc.local
+endif
+
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
@@ -29,7 +33,7 @@ Plugin 'sjl/gundo.vim'
 " Plugin 'sontek/rope-vim'
 Plugin 'mrtazz/simplenote.vim'
 " Plugin 'joonty/vdebug.git'
-Plugin 'klen/python-mode'
+Plugin 'python-mode/python-mode'
 Plugin 'vim-airline/vim-airline'
 " Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'kana/vim-metarw'
@@ -41,13 +45,17 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
 Plugin 'LnL7/vim-nix'
 Plugin 'tpope/vim-abolish'
-Plugin 'psf/black'
+if exists('g:use_black')
+    Plugin 'psf/black'
+endif
 " Plugin 'paulkass/jira-vim'
-Plugin 'file:///home/reinhardt/projects/hamster/octodon'
+if exists('g:use_octodon')
+    Plugin 'file://~/projects/hamster/octodon'
+endif
 
 "let g:black_virtualenv = '/home/reinhardt/.local/pipx/venvs/black'
 
-let g:octodon_virtualenv = '/home/reinhardt/projects/hamster/octodon'
+let g:octodon_virtualenv = '~/.local/share/nvim/octodon'
 python3 << endpython3
 sys.path.insert(0, "/home/reinhardt/projects/hamster/octodon/src")
 endpython3
@@ -155,7 +163,7 @@ function! ZPretty(type)
     else
         let l:params = ' --' . a:type
     endif
-    execute ':silent %!/home/reinhardt/.vim/zpretty/bin/zpretty' . l:params
+    execute ':silent %!zpretty' . l:params
     call setpos('.', save_pos)
 endfunction
 
@@ -231,8 +239,13 @@ function! ToggleAutoFormat()
 endfunction
 
 autocmd TermOpen * setlocal numberwidth=7
-autocmd BufWritePost /home/reinhardt/projects/notes/_notes/*.md call jobstart('/home/reinhardt/projects/notes/notes.sh', {'detach': 1})
-autocmd BufWritePost /home/reinhardt/Notes/*.md call jobstart('/home/reinhardt/projects/notes/notes.sh', {'detach': 1})
+autocmd BufWritePost /home/reinhardt/Notes/*.md,/home/reinhardt/projects/notes/_notes/*.md call jobstart('/home/reinhardt/projects/notes/notes.sh', {'detach': 1})
+autocmd BufWritePost *.md call jobstart('pandoc --standalone --from markdown_strict --to html --metadata title=Preview --output /tmp/' . expand('%:t') . '-preview.html < ' . expand('%'))
+autocmd BufWritePost mutt-* call jobstart('mutt-multipart-filter > /tmp/' . expand('%:t') . '-preview.html < ' . expand('%'))
+autocmd BufRead,BufNewFile *.zcml setfiletype xml
+
+noremap <silent> <Leader>p :!qutebrowser file:///tmp/%:t-preview.html<CR>
+
 
 "if has("nvim-0.4.2")
 "    autocmd TermEnter * setlocal nonumber
@@ -274,8 +287,11 @@ let g:vdebug_keymap = {
 
 let g:pymode_folding = 0
 let g:pymode_lint_cwindow = 0
+let g:pymode_rope_regenerate_on_write = 0
 let g:pymode_rope_complete_on_dot = 0
-let g:pymode_rope = 0
+let g:pymode_rope_autoimport = 1
+let g:pymode_rope_lookup_project = 1
+let g:pymode_rope = 1
 let g:pymode_trim_whitespaces = 0
 let g:pymode_options_max_line_length = 88
 let g:pymode_breakpoint_bind = ""
