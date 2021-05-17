@@ -5,7 +5,7 @@ OFF=$(xrandr | grep "^[A-Z]\+-[0-9-]\+ disconnected" | sed -e "s/^\(\S*\).*/\1/"
 
 xrandr $(
     python -c "print(' '.join(
-    [' --output {} --auto --left-of eDP-1'.format(display)
+    [' --output {} --auto --left-of eDP-1 --primary'.format(display)
      for display in '''${CURRENT}'''.split('\n')] if '''${CURRENT}''' else '' 
 ))
 print(' '.join(
@@ -15,4 +15,5 @@ print(' '.join(
 " \
 ) --output eDP-1 --auto;
 
-$(dirname "$0")/random-wallpaper.py
+sleep 1s;
+$(dirname "$0")/cycle-wallpaper
