@@ -41,7 +41,7 @@ with subprocess.Popen(
             line, prefix = line[1:], ","
 
         octodon_summary = subprocess.run(
-            "timeout 2s {} --new-session --date=+0 total".format(OCTODON_BIN),
+            "timeout 3s {} --new-session --date=+0 total".format(OCTODON_BIN),
             stdout=subprocess.PIPE,
             shell=True,
         ).stdout
@@ -58,7 +58,7 @@ with subprocess.Popen(
 
         mic_mute = int(
             subprocess.run(
-                "pulsemixer --get-mute --id 1",
+                "pulsemixer --get-mute --id source-1",
                 stdout=subprocess.PIPE,
                 shell=True,
             ).stdout
