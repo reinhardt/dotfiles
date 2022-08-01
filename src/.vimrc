@@ -35,6 +35,7 @@ Plugin 'mrtazz/simplenote.vim'
 " Plugin 'joonty/vdebug.git'
 Plugin 'python-mode/python-mode'
 Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 " Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plugin 'kana/vim-metarw'
 Plugin 'kana/vim-metarw-git'
@@ -45,13 +46,18 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
 Plugin 'LnL7/vim-nix'
 Plugin 'tpope/vim-abolish'
+Plugin 'junegunn/fzf'
+Plugin 'junegunn/fzf.vim'
 if exists('g:use_black')
     Plugin 'psf/black'
+    Plugin 'brentyi/isort.vim'
 endif
 " Plugin 'paulkass/jira-vim'
 if exists('g:use_octodon')
-    Plugin 'file://~/projects/hamster/octodon'
+    Plugin 'reinhardt/octodon'
 endif
+
+let mapleader = ","
 
 "let g:black_virtualenv = '/home/reinhardt/.local/pipx/venvs/black'
 
@@ -59,8 +65,12 @@ let g:octodon_virtualenv = '~/.local/share/nvim/octodon'
 python3 << endpython3
 sys.path.insert(0, "/home/reinhardt/projects/hamster/octodon/src")
 endpython3
-noremap <Leader>oc :OctodonClock<CR>
-noremap <Leader>os :OctodonTimeSum<CR>
+noremap <Leader>o :OctodonClock<CR>
+" noremap <Leader>os :OctodonTimeSum<CR>
+
+noremap <Leader>g :vert Git<CR>
+noremap <Leader>h :s~https://github.com/\([^/]*\)/\([^/]*\)/issues/\([0-9]*\)~\1/\2#\3~<CR>
+noremap <Leader>H :s~\([^/ ]*\)/\([^/]*\)#\([0-9]*\)~https://github.com/\1/\2/issues/\3~<CR>
 
 call vundle#end()
 
@@ -150,6 +160,7 @@ function! ToggleSpell()
   endif
 endfunction
 
+noremap <Leader>n :let @+=expand("%:p")<CR>
 noremap <Leader>b :let @+="b " . expand("%:p") . ":" . line(".")<CR>
 
 cnoremap <ESC><BS> <C-W>
@@ -186,8 +197,8 @@ set nojoinspaces
 set t_Co=256
 set complete-=i
 set path=.,,parts/omelette/**,parts/packages/**,src/**,dev/**,lib/**,/usr/include
-set splitright
-set splitbelow
+"set splitright
+"set splitbelow
 set cursorline
 set nocursorcolumn
 
@@ -209,34 +220,56 @@ set background=light
 filetype on
 filetype plugin indent on
 
-let g:autoformat = 1
-function SetAutoFormat(value)
+let g:autoblack = 1
+function SetAutoBlack(value)
     if a:value
+        autocmd BufWritePre *.py execute ':Isort'
         autocmd BufWritePre *.py execute ':Black'
+        let g:autoblack = 1
+    else
+        autocmd! BufWritePre *.py
+        let g:autoblack = 0
+    endif
+endfunction
+call SetAutoBlack(1)
+
+let g:autozpretty = 1
+function SetAutoZPretty(value)
+    if a:value
         autocmd BufWritePre *.pt call ZPretty('pt')
         autocmd BufWritePre *.zcml call ZPretty('zcml')
         autocmd BufWritePre *.xml call ZPretty('xml')
-        let g:autoformat = 1
+        let g:autozpretty = 1
     else
-        autocmd! BufWritePre *.py
         autocmd! BufWritePre *.pt
         autocmd! BufWritePre *.zcml
         autocmd! BufWritePre *.xml
-        let g:autoformat = 0
+        let g:autozpretty = 0
     endif
 endfunction
-call SetAutoFormat(1)
+call SetAutoZPretty(1)
 
-noremap <silent> <Leader>f :call ToggleAutoFormat()<CR>
-function! ToggleAutoFormat()
-    if g:autoformat
-        echo "Autoformat off"
-        call SetAutoFormat(0)
+function! ToggleAutoBlack()
+    if g:autoblack
+        echo "Auto Black off"
+        call SetAutoBlack(0)
     else
-        echo "Autoformat on"
-        call SetAutoFormat(1)
+        echo "Auto Black on"
+        call SetAutoBlack(1)
     endif
 endfunction
+function! ToggleAutoZPretty()
+    if g:autozpretty
+        echo "Auto ZPretty off"
+        call SetAutoZPretty(0)
+    else
+        echo "Auto ZPretty on"
+        call SetAutoZPretty(1)
+    endif
+endfunction
+
+noremap <silent> <Leader>f :call ToggleAutoBlack()<CR>
+noremap <silent> <Leader>z :call ToggleAutoZPretty()<CR>
 
 autocmd TermOpen * setlocal numberwidth=7
 autocmd BufWritePost /home/reinhardt/Notes/*.md,/home/reinhardt/projects/notes/_notes/*.md call jobstart('/home/reinhardt/projects/notes/notes.sh', {'detach': 1})
@@ -285,7 +318,14 @@ let g:vdebug_keymap = {
 \    "eval_visual" : "<Leader>e",
 \}
 
+python3 << endpython3
+sys.path.insert(0, "/home/reinhardt/.local/pipx/venvs/pylint/lib/python3.8/site-packages/")
+endpython3
+
+let g:pymode_debug = 0
 let g:pymode_folding = 0
+let g:pymode_lint_checkers = ['pylint', 'pyflakes', 'mccabe']
+let g:pymode_lint_options_pylint = {'max_line_length': 88, 'load-plugins': 'perflint', 'disable': ['imports', 'invalid-name', 'no-member', 'no-self-use', 'missing-module-docstring', 'empty-function-docstring'], 'clear_cache': 1}
 let g:pymode_lint_cwindow = 0
 let g:pymode_rope_regenerate_on_write = 0
 let g:pymode_rope_complete_on_dot = 0
@@ -299,6 +339,8 @@ if has('nvim')
     let g:pymode_python = 'python3'
 endif
 
+let g:isort_vim_options = '--profile=black --force-alphabetical-sort --force-single-line --lines-after-imports=2'
+
 let g:netrw_localrmdir='rm -r'
 let g:netrw_keepdir=0
 let g:netrw_localcopycmdopt=" -R"
@@ -306,6 +348,31 @@ let g:netrw_liststyle=1
 let g:netrw_banner=0
 
 noremap - :Explore<CR>
+
+let g:airline_section_y=''
+let g:airline_section_z='%3p%% %#__accent_bold#%{g:airline_symbols.maxlinenr}%#__restore__# :%3v'
+let g:airline_solarized_bg='dark'
+let g:airline_theme='bubblegum'
+let g:airline_theme_patch_func = 'AirlineThemePatch'
+function! AirlineThemePatch(palette)
+if g:airline_theme == 'solarized'
+    for colors in values(a:palette.inactive)
+    let colors[2] = 245
+    let colors[3] = 254
+    endfor
+endif
+endfunction
+
+
+" Add --follow to Rg command
+command! -bang -nargs=* Rg call fzf#vim#grep(
+            \ "rg --column --line-number --no-heading --color=always --smart-case --follow -- ".shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=* Rgg call fzf#vim#grep(
+            \ "rg --column --line-number --no-heading --color=always --smart-case --follow --no-ignore-vcs -- ".shellescape(<q-args>), 1, fzf#vim#with_preview(), <bang>0)
+noremap <Leader>. :Files<CR>
+
+let g:snipMate = get(g:, 'snipMate', {})
+let g:snipMate['snippet_version'] = 1
 
 if has("gui_running")
 "    set guifont=Monospace\ 12
