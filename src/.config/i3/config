@@ -47,7 +47,7 @@ set $blue #268bd2
 set $violet #6c71c4
 set $magenta #d33682
 
-set $accent #6c71c4
+set $accent #dc322f
 
 # class                  border   backgr.  text     indicator child_border
 client.focused           $base2   $accent  $base2   $accent   $base2
@@ -59,6 +59,7 @@ client.focused_inactive  $base01  $base02  $base01  $orange   $base01
 bar {
         status_command my_i3status
 #        font pango:DejaVu Sans Mono for Powerline 10.5
+    workspace_min_width 25
     colors {
         focused_background $base2
         background $base3
@@ -74,18 +75,28 @@ bar {
     }
 }
 
-workspace_layout tabbed
+workspace_layout stacked
 
-set $workspace1 "1: asgardr"
-set $workspace2 "2: vanaheimr"
-set $workspace3 "3: alfheimr"
-set $workspace4 "4: midgardr"
-set $workspace5 "5: jotunheimr"
-set $workspace6 "6: muspellsheimr"
-set $workspace7 "7: svartalfaheimr"
-set $workspace8 "8: niflheimr"
-set $workspace9 "9: helheimr"
-set $workspace0 "10: nidavellir"
+set $workspace1 "1"
+set $workspace2 "2"
+set $workspace3 "3"
+set $workspace4 "4"
+set $workspace5 "5"
+set $workspace6 "6"
+set $workspace7 "7"
+set $workspace8 "8"
+set $workspace9 "9"
+set $workspace0 "10"
+#set $workspace1 "1: asgardr"
+#set $workspace2 "2: vanaheimr"
+#set $workspace3 "3: alfheimr"
+#set $workspace4 "4: midgardr"
+#set $workspace5 "5: jotunheimr"
+#set $workspace6 "6: muspellsheimr"
+#set $workspace7 "7: svartalfaheimr"
+#set $workspace8 "8: niflheimr"
+#set $workspace9 "9: helheimr"
+#set $workspace0 "10: nidavellir"
 
 # assign workspaces to outputs
 workspace $workspace1 output primary
@@ -107,7 +118,7 @@ bindsym $mod+Return exec terminal -e "tmux"
 bindsym $mod+Shift+Return exec terminal
 
 # start slc video chat
-bindsym $mod+t exec chromium https://jitsi.quaivecloud.com/SyslabDaily
+bindsym $mod+t exec chromium https://jitsi.quaivecloud.com/
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -119,8 +130,9 @@ bindsym $mod+c exec clipmenu -i -fn "Monospace:size=8" -nb "$base3" -nf "$base00
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
-bindsym $mod+i exec wifi_toggle
 bindsym $mod+p exec passmenu
+# $mod+u is set to "mute"
+bindsym $mod+y exec dmenu_unicode
 
 # go online in Gajim
 bindsym $mod+o exec gajim-remote change_status online
@@ -228,7 +240,7 @@ bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec dmenu_exit
 # lock screen
-bindsym $mod+Shift+y exec i3lock -i ~/.lockscreen -t -c 000000
+bindsym $mod+Shift+w exec i3lock -i ~/.lockscreen -t -c 000000
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -249,6 +261,15 @@ mode "resize" {
         bindsym Up resize shrink height 10 px or 10 ppt
         bindsym Right resize grow width 10 px or 10 ppt
 
+        # set fixed size
+        bindsym 0 resize set 1024 768
+        bindsym 1 resize set 1280 800
+        bindsym 2 resize set 1920 1080
+        bindsym 3 resize set 2560 1440
+        bindsym 4 resize set 3840 2160
+        bindsym 7 resize set 768 1280
+        bindsym 8 resize set 1440 1280
+
         # back to normal: Enter or Escape
         bindsym Return mode "default"
         bindsym Escape mode "default"
@@ -262,6 +283,8 @@ bindsym Print exec scrot --focused '/tmp/%Y-%m-%d-%H-%M-%S_$wx$h.png'
 bindsym $mod+s exec scrot --focused '/tmp/%Y-%m-%d-%H-%M-%S_$wx$h.png'
 # Toggle Touchpad auto-disable
 bindsym $mod+Shift+s exec syndaemon_toggle.sh
+# Mail
+bindsym $mod+n exec terminal -e "tmux new-session mutt"
 
 # Make the currently focused window a scratchpad
 bindsym $mod+Shift+minus move scratchpad
@@ -278,6 +301,3 @@ exec xbindkeys
 exec clipmenud
 exec keynav
 exec cycle-wallpaper
-exec xrandr --output DP-3-2 --primary
-exec ssh-add ~/.ssh/id_rsa
-exec ssh-add ~/.ssh/id_ed25519
