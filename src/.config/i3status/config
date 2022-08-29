@@ -1,0 +1,60 @@
+# i3status configuration file.
+# see "man i3status" for documentation.
+
+# It is important that this file is edited as UTF-8.
+# The following line should contain a sharp s:
+# ß
+# If the above line is not correctly displayed, fix your editor first!
+
+general {
+        output_format = "i3bar"
+        colors = true
+        color_good = "#586e75"
+        color_bad = "#dc322f"
+        color_degraded = "#b58900"
+        interval = 5
+}
+
+order += "ipv6"
+order += "wireless _first_"
+order += "battery all"
+order += "load"
+order += "tztime local"
+
+volume master {
+    format = "🎤"
+    format_muted = "🔇"
+    device = "pulse:alsa_input.pci-0000_00_1f.3.analog-stereo"
+}
+
+ipv6 {
+    format_up = "IPv6 ✓"
+}
+
+wireless _first_ {
+        format_up = "W: (%quality at %essid)"
+        format_down = "W: down"
+        color_bad = "#586e75"
+}
+
+battery all {
+        format = "%status %percentage %remaining"
+        status_chr = "⛽ CHR"
+        status_bat = "⍯ BAT"
+        status_unk = "? UNK"
+        status_full = "✓ FULL"
+        hide_seconds = true
+        min_width = "✓ FULL 99.99% 00:00"
+}
+
+tztime local {
+        format = "%Y-%m-%d %H:%M:%S"
+}
+
+load {
+        format = "%15min"
+}
+
+disk "/" {
+        format = "%avail"
+}
