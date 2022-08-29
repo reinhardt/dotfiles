@@ -47,14 +47,16 @@ with subprocess.Popen(
         ).stdout
         octodon_summary = " {} ".format(octodon_summary.decode("utf-8").strip())
 
-        tracking_files = os.listdir(TRACKING_DIR)
-        tracking_files.sort(
-            key=lambda f: os.stat(os.path.join(TRACKING_DIR, f)).st_mtime
-        )
-        newest_file = os.path.join(TRACKING_DIR, tracking_files[-1])
-        with open(newest_file) as tracking_data:
-            last_line = tracking_data.readlines()[-1]
-            last_line = " {} ".format(last_line.strip())
+        last_line = ""
+        if os.path.exists(TRACKING_DIR):
+            tracking_files = os.listdir(TRACKING_DIR)
+            tracking_files.sort(
+                key=lambda f: os.stat(os.path.join(TRACKING_DIR, f)).st_mtime
+            )
+            newest_file = os.path.join(TRACKING_DIR, tracking_files[-1])
+            with open(newest_file) as tracking_data:
+                last_line = tracking_data.readlines()[-1]
+                last_line = " {} ".format(last_line.strip())
 
         mic_mute = int(
             subprocess.run(
