@@ -34,6 +34,11 @@ Plugin 'sjl/gundo.vim'
 Plugin 'mrtazz/simplenote.vim'
 " Plugin 'joonty/vdebug.git'
 Plugin 'python-mode/python-mode'
+Plugin 'davidhalter/jedi-vim'
+" Plugin 'ycm-core/YouCompleteMe'
+" Plugin 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
+Plugin 'ludovicchabant/vim-gutentags'
+Plugin 'preservim/tagbar'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 " Plugin 'powerline/powerline', {'rtp': 'powerline/bindings/vim/'}
@@ -44,6 +49,8 @@ Plugin 'mattn/vim-metarw-simplenote'
 Plugin 'blueyed/vim-diminactive'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
+Plugin 'shumphrey/fugitive-gitlab.vim'
+Plugin 'tpope/vim-rhubarb'
 Plugin 'LnL7/vim-nix'
 Plugin 'tpope/vim-abolish'
 Plugin 'junegunn/fzf'
@@ -57,6 +64,7 @@ if exists('g:use_octodon')
     Plugin 'reinhardt/octodon'
 endif
 
+let g:python3_host_prog = '/home/reinhardt/.local/share/nvim/python/bin/python'
 let mapleader = ","
 
 "let g:black_virtualenv = '/home/reinhardt/.local/pipx/venvs/black'
@@ -223,7 +231,7 @@ filetype plugin indent on
 let g:autoblack = 1
 function SetAutoBlack(value)
     if a:value
-        autocmd BufWritePre *.py execute ':Isort'
+        autocmd BufWritePre *.py call isort#Isort(0, line('$'), v:null, v:false)
         autocmd BufWritePre *.py execute ':Black'
         let g:autoblack = 1
     else
@@ -318,16 +326,18 @@ let g:vdebug_keymap = {
 \    "eval_visual" : "<Leader>e",
 \}
 
-python3 << endpython3
-sys.path.insert(0, "/home/reinhardt/.local/pipx/venvs/pylint/lib/python3.8/site-packages/")
-endpython3
+" python3 << endpython3
+" sys.path.insert(0, "/home/reinhardt/.local/pipx/venvs/pylint/lib/python3.8/site-packages/")
+" endpython3
 
+let g:pymode_virtualenv_path = '/home/reinhardt/.local/share/nvim/python'
 let g:pymode_debug = 0
 let g:pymode_folding = 0
 let g:pymode_lint_checkers = ['pylint', 'pyflakes', 'mccabe']
-let g:pymode_lint_options_pylint = {'max_line_length': 88, 'load-plugins': 'perflint', 'disable': ['imports', 'invalid-name', 'no-member', 'no-self-use', 'missing-module-docstring', 'empty-function-docstring'], 'clear_cache': 1}
+let g:pymode_lint_options_pylint = {'max_line_length': 88, 'load-plugins': 'perflint', 'disable': ['imports', 'invalid-name', 'no-member', 'no-self-use', 'missing-module-docstring', 'empty-function-docstring', 'loop-global-usage'], 'clear_cache': 1}
 let g:pymode_lint_cwindow = 0
 let g:pymode_rope_regenerate_on_write = 0
+let g:pymode_rope_completion = 0
 let g:pymode_rope_complete_on_dot = 0
 let g:pymode_rope_autoimport = 1
 let g:pymode_rope_lookup_project = 1
@@ -339,12 +349,19 @@ if has('nvim')
     let g:pymode_python = 'python3'
 endif
 
+let g:gutentags_project_root=['buildout.cfg']
+let g:gutentags_add_default_project_roots=0
+
+noremap <Leader>t :TagbarToggle<CR>
+
+set foldlevel=10
+
 let g:isort_vim_options = '--profile=black --force-alphabetical-sort --force-single-line --lines-after-imports=2'
 
 let g:netrw_localrmdir='rm -r'
 let g:netrw_keepdir=0
 let g:netrw_localcopycmdopt=" -R"
-let g:netrw_liststyle=1
+let g:netrw_liststyle=0
 let g:netrw_banner=0
 
 noremap - :Explore<CR>
@@ -373,6 +390,8 @@ noremap <Leader>. :Files<CR>
 
 let g:snipMate = get(g:, 'snipMate', {})
 let g:snipMate['snippet_version'] = 1
+
+let g:fugitive_gitlab_domains = ['https://git.syslab.com']
 
 if has("gui_running")
 "    set guifont=Monospace\ 12

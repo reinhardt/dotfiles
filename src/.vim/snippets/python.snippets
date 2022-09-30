@@ -2,6 +2,10 @@
 #	import pdb; pdb.set_trace()
 #snippet ipdb
 #	import ipdb; ipdb.set_trace()
+snippet mypdb
+	import pdb
+	mypdb = pdb.Pdb(stdin=open('/tmp/fifo_stdin','r'), stdout=open('/tmp/fifo_stdout','w'))
+	mypdb.set_trace()
 snippet Test
 	import unittest
 
@@ -11,7 +15,7 @@ snippet Test
 snippet log
 	import logging
 
-	log = logging.getLogger(__name__)
+	logger = logging.getLogger(__name__)
 snippet View
 	from five import grok
 
