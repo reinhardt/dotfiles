@@ -33,11 +33,7 @@ Plugin 'sjl/gundo.vim'
 " Plugin 'sontek/rope-vim'
 Plugin 'mrtazz/simplenote.vim'
 " Plugin 'joonty/vdebug.git'
-Plugin 'python-mode/python-mode'
-Plugin 'davidhalter/jedi-vim'
-" Plugin 'ycm-core/YouCompleteMe'
-" Plugin 'autozimu/LanguageClient-neovim', { 'branch': 'next', 'do': 'bash install.sh' }
-Plugin 'ludovicchabant/vim-gutentags'
+Plugin 'neovim/nvim-lspconfig'
 Plugin 'preservim/tagbar'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
@@ -55,16 +51,56 @@ Plugin 'LnL7/vim-nix'
 Plugin 'tpope/vim-abolish'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
-if exists('g:use_black')
-    Plugin 'psf/black'
-    Plugin 'brentyi/isort.vim'
-endif
 " Plugin 'paulkass/jira-vim'
 if exists('g:use_octodon')
     Plugin 'reinhardt/octodon'
 endif
 
+call vundle#end()
+
 let g:python3_host_prog = '/home/reinhardt/.local/share/nvim/python/bin/python'
+
+lua << EOF
+local on_attach = function(client, bufnr)
+  -- Enable completion triggered by <c-x><c-o>
+  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  vim.api.nvim_buf_set_option(0, 'formatexpr', 'v:lua.vim.lsp.formatexpr()')
+
+  -- Mappings.
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  local bufopts = { noremap=true, silent=true, buffer=bufnr }
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+  vim.keymap.set('n', 'g<c-]>', vim.lsp.buf.definition, bufopts)
+  vim.keymap.set('n', '<c-]>', vim.lsp.buf.definition, bufopts)
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+end
+require('lspconfig')['pylsp'].setup({
+    settings = {
+        pylsp = {
+            plugins = {
+                pylint = {
+                    enabled = true,
+                    args = {
+                        '--max-line-length 88',
+--                        '--load-plugins perflint',
+                        '--disable imports,invalid-name,no-member,no-self-use,missing-module-docstring,empty-function-docstring,loop-global-usage',
+                    },
+                },
+                pycodestyle = {
+                    maxLineLength = 88,
+                },
+                black = {
+                    enabled = true,
+                },
+            }
+        }
+    },
+    on_attach = on_attach,
+})
+EOF
+
 let mapleader = ","
 
 "let g:black_virtualenv = '/home/reinhardt/.local/pipx/venvs/black'
@@ -79,8 +115,6 @@ noremap <Leader>o :OctodonClock<CR>
 noremap <Leader>g :vert Git<CR>
 noremap <Leader>h :s~https://github.com/\([^/]*\)/\([^/]*\)/issues/\([0-9]*\)~\1/\2#\3~<CR>
 noremap <Leader>H :s~\([^/ ]*\)/\([^/]*\)#\([0-9]*\)~https://github.com/\1/\2/issues/\3~<CR>
-
-call vundle#end()
 
 call metarw#define_wrapper_commands(0)
 
@@ -228,18 +262,33 @@ set background=light
 filetype on
 filetype plugin indent on
 
-let g:autoblack = 1
-function SetAutoBlack(value)
-    if a:value
-        autocmd BufWritePre *.py call isort#Isort(0, line('$'), v:null, v:false)
-        autocmd BufWritePre *.py execute ':Black'
-        let g:autoblack = 1
+lua << EOF
+vim.g.autoblack = 0
+local set_auto_black = function(value)
+    if value then
+        vim.api.nvim_create_autocmd("CursorHold", {
+            pattern = "*.py",
+            callback = vim.lsp.buf.formatting,
+        })
+        vim.g.autoblack = 1
     else
-        autocmd! BufWritePre *.py
-        let g:autoblack = 0
-    endif
-endfunction
-call SetAutoBlack(1)
+        vim.api.nvim_del_autocmd("CursorHold")
+        vim.g.autoblack = 0
+    end
+end
+local toggle_auto_black = function()
+    if vim.g.autoblack then
+        print("Auto Black off")
+        set_auto_black(0)
+    else
+        print("Auto Black on")
+        set_auto_black(1)
+    end
+end
+
+set_auto_black(1)
+vim.keymap.set('n', '<Leader>f', toggle_auto_black)
+EOF
 
 let g:autozpretty = 1
 function SetAutoZPretty(value)
@@ -257,15 +306,6 @@ function SetAutoZPretty(value)
 endfunction
 call SetAutoZPretty(1)
 
-function! ToggleAutoBlack()
-    if g:autoblack
-        echo "Auto Black off"
-        call SetAutoBlack(0)
-    else
-        echo "Auto Black on"
-        call SetAutoBlack(1)
-    endif
-endfunction
 function! ToggleAutoZPretty()
     if g:autozpretty
         echo "Auto ZPretty off"
@@ -276,7 +316,6 @@ function! ToggleAutoZPretty()
     endif
 endfunction
 
-noremap <silent> <Leader>f :call ToggleAutoBlack()<CR>
 noremap <silent> <Leader>z :call ToggleAutoZPretty()<CR>
 
 autocmd TermOpen * setlocal numberwidth=7
@@ -326,15 +365,11 @@ let g:vdebug_keymap = {
 \    "eval_visual" : "<Leader>e",
 \}
 
-" python3 << endpython3
-" sys.path.insert(0, "/home/reinhardt/.local/pipx/venvs/pylint/lib/python3.8/site-packages/")
-" endpython3
-
 let g:pymode_virtualenv_path = '/home/reinhardt/.local/share/nvim/python'
 let g:pymode_debug = 0
 let g:pymode_folding = 0
 let g:pymode_lint_checkers = ['pylint', 'pyflakes', 'mccabe']
-let g:pymode_lint_options_pylint = {'max_line_length': 88, 'load-plugins': 'perflint', 'disable': ['imports', 'invalid-name', 'no-member', 'no-self-use', 'missing-module-docstring', 'empty-function-docstring', 'loop-global-usage'], 'clear_cache': 1}
+let g:pymode_lint_options_pylint = {'clear_cache': 1}
 let g:pymode_lint_cwindow = 0
 let g:pymode_rope_regenerate_on_write = 0
 let g:pymode_rope_completion = 0
