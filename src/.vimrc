@@ -33,7 +33,10 @@ Plugin 'sjl/gundo.vim'
 " Plugin 'sontek/rope-vim'
 Plugin 'mrtazz/simplenote.vim'
 " Plugin 'joonty/vdebug.git'
-Plugin 'neovim/nvim-lspconfig'
+if has("nvim")
+    Plugin 'neovim/nvim-lspconfig'
+endif
+Plugin 'neoclide/coc.nvim', {'branch': 'release'}
 Plugin 'preservim/tagbar'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
@@ -76,29 +79,37 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<c-]>', vim.lsp.buf.definition, bufopts)
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
 end
-require('lspconfig')['pylsp'].setup({
-    settings = {
-        pylsp = {
-            plugins = {
-                pylint = {
-                    enabled = true,
-                    args = {
-                        '--max-line-length 88',
---                        '--load-plugins perflint',
-                        '--disable imports,invalid-name,no-member,no-self-use,missing-module-docstring,empty-function-docstring,loop-global-usage',
+if vim.fn.has("nvim") then
+    require('lspconfig')['pylsp'].setup({
+        settings = {
+            pylsp = {
+                plugins = {
+                    black = {
+                        enabled = true,
                     },
-                },
-                pycodestyle = {
-                    maxLineLength = 88,
-                },
-                black = {
-                    enabled = true,
-                },
+                    pycodestyle = {
+                        maxLineLength = 88,
+                    },
+                    pylint = {
+                        enabled = true,
+                        args = {
+                            '--max-line-length 88',
+--                          '--load-plugins perflint',
+                            '--disable imports,invalid-name,no-member,no-self-use,missing-module-docstring,empty-function-docstring,loop-global-usage',
+                        },
+                    },
+                    rope_autoimport = {
+                        enabled = true,
+                    },
+                }
             }
-        }
-    },
-    on_attach = on_attach,
-})
+        },
+        on_attach = on_attach,
+    })
+--    require('lspconfig')['jedi_language_server'].setup({
+--        on_attach = on_attach,
+--    })
+end
 EOF
 
 let mapleader = ","
@@ -244,6 +255,9 @@ set path=.,,parts/omelette/**,parts/packages/**,src/**,dev/**,lib/**,/usr/includ
 set cursorline
 set nocursorcolumn
 
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+
 "set termguicolors
 colorscheme solarized8_high
 set background=light
@@ -264,20 +278,23 @@ filetype plugin indent on
 
 lua << EOF
 vim.g.autoblack = 0
+autocmd_id = -1
 local set_auto_black = function(value)
-    if value then
-        vim.api.nvim_create_autocmd("CursorHold", {
+    if value == 1 then
+        autocmd_id = vim.api.nvim_create_autocmd("CursorHold", {
             pattern = "*.py",
             callback = vim.lsp.buf.formatting,
         })
         vim.g.autoblack = 1
     else
-        vim.api.nvim_del_autocmd("CursorHold")
+        if autocmd_id ~= -1 then
+            vim.api.nvim_del_autocmd(autocmd_id)
+        end
         vim.g.autoblack = 0
     end
 end
 local toggle_auto_black = function()
-    if vim.g.autoblack then
+    if vim.g.autoblack == 1 then
         print("Auto Black off")
         set_auto_black(0)
     else
