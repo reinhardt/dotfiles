@@ -8,9 +8,8 @@ config_version: 2
 settings:
   bindings.commands:
     global:
-      insert:
-        <Escape>: mode-leave ;; jseval -q document.activeElement.blur()
       normal:
+        ',j': spawn --userscript jira_edit.py
         ',p': spawn --userscript qute-pass --dmenu-invocation dmenu
         <Ctrl+h>: tab-prev
         <Ctrl+l>: tab-next
@@ -22,13 +21,44 @@ settings:
         d: null
         gl: tab-move -
         gr: tab-move +
+  colors.messages.warning.bg:
+    global: '#6c71c4'
+  content.cookies.accept:
+    global: no-3rdparty
+  content.desktop_capture:
+    https://discord.com: true
+    https://jitsi.quaivecloud.com: true
   content.geolocation:
     https://www.lieferando.de: false
+  content.headers.accept_language:
+    global: fr-FR,fr,de-DE,de,en-GB,en-US,en;q=0.9
   content.media.audio_capture:
+    https://app.gather.town: true
+    https://discord.com: true
+    https://jitsi.quaivecloud.com: true
+    https://mattermost.syslab.com: true
     https://meet.jit.si: true
+    https://play.workadventu.re: true
+    https://teams.microsoft.com: true
   content.media.audio_video_capture:
+    https://app.gather.town: true
+    https://jitsi.quaivecloud.com: true
     https://meet.jit.si: true
+    https://play.workadventu.re: true
   content.media.video_capture:
+    https://app.gather.town: true
+    https://discord.com: true
+    https://jitsi.quaivecloud.com: true
     https://meet.jit.si: true
+    https://play.workadventu.re: true
+    https://teams.microsoft.com: true
   content.site_specific_quirks.enabled:
     global: true
+  content.user_stylesheets:
+    global: null
+  downloads.location.directory:
+    global: /tmp
+  tabs.last_close:
+    global: close
+  window.title_format:
+    global: '{perc}{current_title}{title_sep}qutebrowser'

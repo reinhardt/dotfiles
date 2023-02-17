@@ -1,16 +1,19 @@
-window.title_format: "{perc}{current_title}{title_sep}qutebrowser ({backend})"
 url.start_pages: ['http://joy/notes/Today.html']
 url.default_page: 'http://joy/notes/Today.html'
 new_instance_open_target: 'window'
+content.cookies.accept: no-3rdparty
+content.headers.accept_language: fr-FR,fr,de-DE,de,en-GB,en-US,en;q=0.9
 content.notifications.enabled: true
 content.plugins: true
 content.user_stylesheets: ['quaive.css']
 completion.cmd_history_max_items: 500
+downloads.remove_finished: 5000
 #editor.command: ["atom", "-f", "{file}"]
 editor.command: ["terminal", "-e", "/run/current-system/sw/bin/nvim -c 'set ft=text|normal {line}G{column0}l' {file}"]
 tabs:
   background: true
   select_on_remove: last-used
+  last_close: close
   #XXX Why does this not work? Currently set in config.py
   #padding:
   #  bottom: 3
@@ -40,6 +43,7 @@ tabs:
 #      even:
 #        fg: "black"
 #        bg: "white"
+#input.insert_mode.auto_load: true
 qt.highdpi: true
 zoom.default: 100%
 fonts:
