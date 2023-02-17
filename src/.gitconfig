@@ -46,4 +46,13 @@
 [gpg]
 	program = gpg2
 [pull]
-	rebase = true
+	rebase = false
+[init]
+	defaultBranch = master
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[safe]
+	directory = /run/media/reinhardt/8e2f0f6d-e989-4309-8246-40eaaa4a8607/projects/densoqs.buildout
