@@ -6,4 +6,4 @@ export QT_SCALE_FACTOR=0.8
 export GDK_SCALE=0.8
 export GDK_DPI_SCALE=0.8
 export CM_SELECTIONS="clipboard"
-monitors_toggle.sh
+monitors_toggle.sh &

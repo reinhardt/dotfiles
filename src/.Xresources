@@ -2,11 +2,11 @@ Xft.dpi: 192
 Xcursor.theme: Obsidian
 Xcursor.size: 64
 
-XTerm*pointerSize: 96
+XTerm*pointerSize: 128
 XTerm*pointerColor: rgb:dc/32/2f
-XTerm*pointerColorBackground: rgb:26/8b/d2
-XTerm*pointerShape: double_arrow
-XTerm.vt100.faceName: Monospace:size=8
+XTerm*pointerColorBackground: rgb:65/7B/83
+XTerm*pointerShape: fleur
+XTerm.vt100.faceName: Monospace:size=7.5
 XTerm*cursorBlink: true
 XTerm*cursorOffTime: 300
 XTerm*cursorOnTime: 1800
