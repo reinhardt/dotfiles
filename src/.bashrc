@@ -25,9 +25,6 @@ shopt -s checkwinsize
 #export LESSOPEN="| /usr/bin/lesspipe %s";
 #export LESSCLOSE="/usr/bin/lesspipe %s %s";
 
-hg_ps1() {
-    hg prompt " ({{branch}}{ {status}})" 2> /dev/null
-}
 export GIT_PS1_SHOWDIRTYSTATE=1
 
 # set variable identifying the chroot you work in (used in the prompt below)
@@ -67,9 +64,11 @@ if [ "$color_prompt" = yes ]; then
     else
         name_color='[01;32m'
     fi
-    PS1='${debian_chroot:+($debian_chroot)}\[\033${name_color}\]\u@\h\[\033[00m\]:\[\033${path_color}\]\w\[\033[00m\]$(__git_ps1 " (%s)")$(hg_ps1)\n\[\033[1;36m\][\t]\[\033[00m\]\$ '
+    #PS1='${debian_chroot:+($debian_chroot)}\[\033${name_color}\]\u@\h\[\033[00m\]:\[\033${path_color}\]\w\[\033[00m\]$(__git_ps1 " (%s)")\n\[\033[1;36m\][\t]\[\033[00m\]\$ '
+    PROMPT_COMMAND='__git_ps1 "${debian_chroot:+($debian_chroot)}\[\033${name_color}\]\u@\h\[\033[00m\]:\[\033${path_color}\]\w\[\033[00m\]" "\n\[\033[1;36m\][\t]\[\033[00m\]\$ "'
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(__git_ps1 " (%s)")\n\[\t]\$ '
+    #PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(__git_ps1 " (%s)")\n\[\t]\$ '
+    PROMPT_COMMAND='__git_ps1 "${debian_chroot:+($debian_chroot)}\u@\h:\w" "\n\[\t]\$ "'
 fi
 unset color_prompt force_color_prompt
 
