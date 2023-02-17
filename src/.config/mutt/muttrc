@@ -33,6 +33,7 @@ set net_inc=5
 set quit=ask-yes
 set index_format="%4C %Z %{%b %d %R} %-15.15L (%?l?%4l&%4c?) %s"
 set sort=reverse-threads
+set sort_aux=last-date
 bind editor <delete> delete-char
 set pager_index_lines=16
 
@@ -40,7 +41,7 @@ set alias_file=~/.config/mutt/mutt-alias
 set query_command="abook --data-file ~/.config/mutt/mutt-alias --mutt-query '%s'"
 macro index,pager A "<pipe-message>abook --add-email-quiet<return>" "add the sender address to abook"
 
-macro pager \cb <pipe-entry>'urlscan'<enter> 'Follow links with urlscan'
+macro pager \cb <pipe-entry>'urlscan --run-safe "qutebrowser {}"'<enter> 'Follow links with urlscan'
 
 # some exceptions to threaded sorting
 folder-hook . "set sort=reverse-threads"
