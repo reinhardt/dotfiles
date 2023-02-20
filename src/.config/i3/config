@@ -114,7 +114,7 @@ workspace $workspace0 output primary
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec terminal -e "tmux"
+bindsym $mod+Return exec xterm
 bindsym $mod+Shift+Return exec terminal
 
 # start slc video chat

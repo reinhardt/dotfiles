@@ -131,3 +131,7 @@ export GPG_TTY=$(tty)
 export PASSWORD_STORE_GENERATED_LENGTH=32
 
 if [[ -f ~/.initialdir ]]; then cd $(cat ~/.initialdir); fi
+
+if [ -x "$(command -v tmux)" ] && [ -n "${DISPLAY}" ] && [ -z "${TMUX}" ]; then
+    tmux >/dev/null 2>&1
+fi
