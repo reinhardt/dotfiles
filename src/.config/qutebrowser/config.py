@@ -25,7 +25,7 @@ s_blue = "#268bd2"
 s_violet = "#6c71c4"
 s_magenta = "#d33682"
 
-accent = "#b58900"
+accent = "#268bd2"
 
 # set qutebrowser colors
 
@@ -244,16 +244,16 @@ c.colors.tabs.even.fg = base00
 c.colors.tabs.even.bg = base3
 
 # Foreground color of selected odd tabs.
-c.colors.tabs.selected.odd.fg = base3
+c.colors.tabs.selected.odd.fg = accent
 
 # Background color of selected odd tabs.
-c.colors.tabs.selected.odd.bg = accent
+c.colors.tabs.selected.odd.bg = base2
 
 # Foreground color of selected even tabs.
-c.colors.tabs.selected.even.fg = base3
+c.colors.tabs.selected.even.fg = accent
 
 # Background color of selected even tabs.
-c.colors.tabs.selected.even.bg = accent
+c.colors.tabs.selected.even.bg = base2
 
 # Background color for webpages if unset (or empty to use the theme's
 # color).
@@ -299,7 +299,18 @@ config.bind("J", "forward")
 config.bind("K", "back")
 config.unbind("d")
 config.bind("D", "tab-close")
-config.bind(",p", "spawn --userscript qute-pass --dmenu-invocation dmenu")
+config.bind(
+    ",p", "spawn --userscript qute-pass --dmenu-invocation dmenu --no-insert-mode"
+)
+config.bind(
+    ",l",
+    (
+        "spawn --userscript qute-pass --dmenu-invocation dmenu --no-insert-mode "
+        "--password-store /home/reinhardt/.password-store-slc"
+    ),
+)
 config.bind(",j", "spawn --userscript jira_edit.py")
+config.bind(",e", "spawn --userscript mattermost-emoji/qute_pick_emoji.py")
+config.bind(",o", "spawn --userscript clockwork")
 
 config.load_autoconfig()

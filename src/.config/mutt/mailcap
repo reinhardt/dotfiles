@@ -9,6 +9,7 @@ application/vnd.openxmlformats-officedocument.wordprocessingml.document; libreof
 image/jpeg; eog %s
 image/png; eog %s
 image/gif; eog %s
+text/calendar; evolution -i %s
 #text/html; firefox -no-remote -P alternative %s
 text/html; mv %s %s.html && qutebrowser %s.html >/dev/null 2>/dev/null; needsterminal;
 text/plain; nvim %s; needsterminal;

@@ -3,10 +3,11 @@ Xcursor.theme: Obsidian
 Xcursor.size: 64
 
 XTerm*pointerSize: 128
-XTerm*pointerColor: rgb:dc/32/2f
+XTerm*pointerColor: rgb:ec/52/af
 XTerm*pointerColorBackground: rgb:65/7B/83
-XTerm*pointerShape: fleur
-XTerm.vt100.faceName: Monospace:size=7.5
+XTerm*pointerShape: text
+!XTerm.vt100.faceName: Monospace:size=7.5
+XTerm.vt100.faceName: Monospace:size=9
 XTerm*cursorBlink: true
 XTerm*cursorOffTime: 300
 XTerm*cursorOnTime: 1800
@@ -38,6 +39,9 @@ XTerm*cursorOnTime: 1800
 !XTerm.vt100.color21: rgb:88/30/88
 !XTerm.vt100.color22: rgb:30/88/88
 !XTerm.vt100.color23: rgb:D8/D8/D8
+
+XTerm*allowTitleOps: true
+XTerm*allowSendEvents: false
 
 XTerm.termName: xterm-256color
 XTerm.vt100.locale: true

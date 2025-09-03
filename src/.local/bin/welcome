@@ -1,0 +1,22 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from datetime import datetime
+from subprocess import check_output
+import time
+
+
+username = check_output("whoami").decode("utf-8").strip()
+hostname = open("/etc/hostname").read().strip()
+now = datetime.now().strftime("%H:%M:%S")
+timezone = " ".join(time.tzname[0])
+loadavg = open("/proc/loadavg", "r").read().split(" ")[0]
+freemem = float(
+    next(
+        (line for line in open("/proc/meminfo", "r").readlines() if "MemFree" in line)
+    ).split(" ")[-2]
+) / (1024.0 * 1024.0)
+print(
+    f'Welcome {username}! You are connected to the node "{hostname}". Local time is '
+    f"{now} {timezone}. Load average is {loadavg}. Memory available is {freemem:.2f} "
+    f"gigabytes."
+)

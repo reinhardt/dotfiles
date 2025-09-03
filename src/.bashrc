@@ -65,7 +65,7 @@ if [ "$color_prompt" = yes ]; then
         name_color='[01;32m'
     fi
     #PS1='${debian_chroot:+($debian_chroot)}\[\033${name_color}\]\u@\h\[\033[00m\]:\[\033${path_color}\]\w\[\033[00m\]$(__git_ps1 " (%s)")\n\[\033[1;36m\][\t]\[\033[00m\]\$ '
-    PROMPT_COMMAND='__git_ps1 "${debian_chroot:+($debian_chroot)}\[\033${name_color}\]\u@\h\[\033[00m\]:\[\033${path_color}\]\w\[\033[00m\]" "\n\[\033[1;36m\][\t]\[\033[00m\]\$ "'
+    PROMPT_COMMAND='__git_ps1 "\[\033[1;36m\][\t]\[\033[00m\]" "\n${debian_chroot:+($debian_chroot)}\[\033${name_color}\]\u@\h\[\033[00m\]:\[\033${path_color}\]\w\[\033[00m\]\$ "'
 else
     #PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w$(__git_ps1 " (%s)")\n\[\t]\$ '
     PROMPT_COMMAND='__git_ps1 "${debian_chroot:+($debian_chroot)}\u@\h:\w" "\n\[\t]\$ "'

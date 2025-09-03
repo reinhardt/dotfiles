@@ -10,6 +10,10 @@ completion.cmd_history_max_items: 500
 downloads.remove_finished: 5000
 #editor.command: ["atom", "-f", "{file}"]
 editor.command: ["terminal", "-e", "/run/current-system/sw/bin/nvim -c 'set ft=text|normal {line}G{column0}l' {file}"]
+hints:
+  mode: 'word'
+  dictionary: /home/reinhardt/.local/share/dict/words
+  auto_follow_timeout: 500
 tabs:
   background: true
   select_on_remove: last-used
@@ -50,8 +54,8 @@ fonts:
   web.family.fixed: "Terminus, Monospace, \"DejaVu Sans Mono\", Monaco, \"Bitstream Vera Sans Mono\", \"Andale Mono\", \"Courier New\", Courier, \"Liberation Mono\", monospace, Fixed, Consolas, Terminal"
   prompts: 10pt "Terminus, Monospace, \"DejaVu Sans Mono\", Monaco, \"Bitstream Vera Sans Mono\", \"Andale Mono\", \"Courier New\", Courier, \"Liberation Mono\", monospace, Fixed, Consolas, Terminal"
   statusbar: 10pt "Terminus, Monospace, \"DejaVu Sans Mono\", Monaco, \"Bitstream Vera Sans Mono\", \"Andale Mono\", \"Courier New\", Courier, \"Liberation Mono\", monospace, Fixed, Consolas, Terminal"
-#  tabs: 10pt monospace
-  statusbar: 10pt monospace
+  tabs.selected: 10pt "\"Cousine for Powerline\", FreeSans, sans"
+  tabs.unselected: 10pt "\"Cousine for Powerline\", FreeSans, sans"
   hints: bold 10pt monospace
   completion.entry: 10pt monospace
   completion.category: bold 10pt monospace

@@ -28,15 +28,20 @@ Plugin 'lifepillar/vim-solarized8'
 Plugin 'limadm/vim-blues'
 Plugin 'ervandew/supertab'
 Plugin 'jamessan/vim-gnupg'
-Plugin 'sjl/gundo.vim'
+" Plugin 'sjl/gundo.vim'
 " Plugin 'sontek/minibufexpl.vim'
 " Plugin 'sontek/rope-vim'
-Plugin 'mrtazz/simplenote.vim'
+" Plugin 'python-rope/ropevim'
+" Plugin 'mrtazz/simplenote.vim'
 " Plugin 'joonty/vdebug.git'
 if has("nvim")
     Plugin 'neovim/nvim-lspconfig'
 endif
-Plugin 'neoclide/coc.nvim', {'branch': 'release'}
+"Plugin 'autozimu/LanguageClient-neovim', {
+"    \ 'branch': 'next',
+"    \ 'do': 'bash install.sh',
+"    \ }
+"Plugin 'neoclide/coc.nvim', {'branch': 'release'}
 Plugin 'preservim/tagbar'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
@@ -44,7 +49,7 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'kana/vim-metarw'
 Plugin 'kana/vim-metarw-git'
 Plugin 'mattn/webapi-vim'
-Plugin 'mattn/vim-metarw-simplenote'
+" Plugin 'mattn/vim-metarw-simplenote'
 Plugin 'blueyed/vim-diminactive'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
@@ -58,10 +63,27 @@ Plugin 'junegunn/fzf.vim'
 if exists('g:use_octodon')
     Plugin 'reinhardt/octodon'
 endif
+" Plugin 'mattscamp/neovim-serenade', { 'do': 'bash install.sh' }
+Plugin 'dpelle/vim-LanguageTool'
 
 call vundle#end()
 
-let g:python3_host_prog = '/home/reinhardt/.local/share/nvim/python/bin/python'
+let g:languagetool_cmd='/run/current-system/sw/bin/languagetool-commandline'
+"let g:languagetool_win_height=-1
+
+"let g:python3_host_prog = '/nix/store/h9pr31qbkyc2wf8hn00y3k7mkj7xc6ys-python3-3.10.12-env/bin/python'
+
+let &titlestring ='VIM MODE:%{mode()} - (%f) %{FugitiveStatusline()} %t'
+set title
+
+"let g:LanguageClient_serverCommands = {
+"    \ 'python': ['/run/current-system/sw/bin/jedi-language-server'],
+"\ }
+"nmap <F5> <Plug>(lcn-menu)
+"" Or map each action separately
+"nmap <silent>K <Plug>(lcn-hover)
+"nmap <silent> gd <Plug>(lcn-definition)
+"nmap <silent> <F2> <Plug>(lcn-rename)
 
 lua << EOF
 local on_attach = function(client, bufnr)
@@ -78,14 +100,27 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', 'g<c-]>', vim.lsp.buf.definition, bufopts)
   vim.keymap.set('n', '<c-]>', vim.lsp.buf.definition, bufopts)
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('n', '<Leader>rn', vim.lsp.buf.rename, bufopts)
+end
+local get_jedi_extra_paths = function()
+  extra = {}
+  if vim.v.argv[#vim.v.argv] == "/srv/pi" then
+      table.insert(extra, "/srv/pi/ploneintranet.py3/src")
+  end
+  return extra
 end
 if vim.fn.has("nvim") then
     require('lspconfig')['pylsp'].setup({
         settings = {
             pylsp = {
+                single_file_support = true,
                 plugins = {
                     black = {
                         enabled = true,
+                    },
+                    jedi = {
+                        extra_paths = get_jedi_extra_paths(),
                     },
                     pycodestyle = {
                         maxLineLength = 88,
@@ -95,7 +130,7 @@ if vim.fn.has("nvim") then
                         args = {
                             '--max-line-length 88',
 --                          '--load-plugins perflint',
-                            '--disable imports,invalid-name,no-member,no-self-use,missing-module-docstring,empty-function-docstring,loop-global-usage',
+                            '--disable imports,invalid-name,no-member,missing-module-docstring,missing-class-docstring,empty-docstring,missing-function-docstring,too-few-public-methods',
                         },
                     },
                     rope_autoimport = {
@@ -113,6 +148,9 @@ end
 EOF
 
 let mapleader = ","
+set timeoutlen=3000
+
+let g:riv_global_leader = '<C-I>'
 
 "let g:black_virtualenv = '/home/reinhardt/.local/pipx/venvs/black'
 
@@ -137,6 +175,9 @@ command! Daily edit ~/Notes/Daily.md
 command! Music edit sn:625a73545154fb1cc48db8bd34dfc9f1
 
 let s:email = 'askesemann@googlemail.com'
+
+map <ScrollWheelUp> <C-Y><C-Y><C-Y>
+map <ScrollWheelDown> <C-E><C-E><C-E>
 
 noremap <silent> <Leader>w :call ToggleWrap()<CR>
 function! SetWrap(value)
@@ -231,7 +272,6 @@ function! ZPretty(type)
     call setpos('.', save_pos)
 endfunction
 
-let g:pydiction_location = '~/.vim/after/ftplugin/pydiction/complete-dict'
 set mouse=a
 set expandtab tabstop=4 shiftwidth=4 
 set autoindent
@@ -256,7 +296,8 @@ set cursorline
 set nocursorcolumn
 
 " Make <CR> to accept selected completion item or notify coc.nvim to format
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+" inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<CR>"
+" nmap <silent> gd <Plug>(coc-definition)
 
 "set termguicolors
 colorscheme solarized8_high
@@ -281,9 +322,11 @@ vim.g.autoblack = 0
 autocmd_id = -1
 local set_auto_black = function(value)
     if value == 1 then
-        autocmd_id = vim.api.nvim_create_autocmd("CursorHold", {
+        autocmd_id = vim.api.nvim_create_autocmd("BufWritePre", {
             pattern = "*.py",
-            callback = vim.lsp.buf.formatting,
+            callback = function ()
+                return vim.lsp.buf.format({ async = false })
+            end
         })
         vim.g.autoblack = 1
     else
@@ -382,25 +425,6 @@ let g:vdebug_keymap = {
 \    "eval_visual" : "<Leader>e",
 \}
 
-let g:pymode_virtualenv_path = '/home/reinhardt/.local/share/nvim/python'
-let g:pymode_debug = 0
-let g:pymode_folding = 0
-let g:pymode_lint_checkers = ['pylint', 'pyflakes', 'mccabe']
-let g:pymode_lint_options_pylint = {'clear_cache': 1}
-let g:pymode_lint_cwindow = 0
-let g:pymode_rope_regenerate_on_write = 0
-let g:pymode_rope_completion = 0
-let g:pymode_rope_complete_on_dot = 0
-let g:pymode_rope_autoimport = 1
-let g:pymode_rope_lookup_project = 1
-let g:pymode_rope = 1
-let g:pymode_trim_whitespaces = 0
-let g:pymode_options_max_line_length = 88
-let g:pymode_breakpoint_bind = ""
-if has('nvim')
-    let g:pymode_python = 'python3'
-endif
-
 let g:gutentags_project_root=['buildout.cfg']
 let g:gutentags_add_default_project_roots=0
 
@@ -408,15 +432,17 @@ noremap <Leader>t :TagbarToggle<CR>
 
 set foldlevel=10
 
-let g:isort_vim_options = '--profile=black --force-alphabetical-sort --force-single-line --lines-after-imports=2'
+"let g:isort_vim_options = '--profile=black --force-alphabetical-sort --force-single-line --lines-after-imports=2'
 
 let g:netrw_localrmdir='rm -r'
 let g:netrw_keepdir=0
 let g:netrw_localcopycmdopt=" -R"
 let g:netrw_liststyle=0
 let g:netrw_banner=0
+let g:netrw_use_errorwindow = 0
 
 noremap - :Explore<CR>
+noremap _ :Rexplore<CR>
 
 let g:airline_section_y=''
 let g:airline_section_z='%3p%% %#__accent_bold#%{g:airline_symbols.maxlinenr}%#__restore__# :%3v'

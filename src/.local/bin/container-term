@@ -1,13 +1,18 @@
 #!/usr/bin/env bash
 HOST=$(echo $0 | sed -e 's/.*\/\(.*\)-term$/\1/')
+DOMAIN=${HOST}.local
 if [[ $(sudo nixos-container status $HOST) == "down" ]]; then
     sudo nixos-container start $HOST;
 fi
 export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
-sshfs $HOST:/srv/$HOST /srv/$HOST
-terminal -e "ssh -t $HOST \"tmux new\"";
-if ! ps -C ssh -fww | grep $HOST | grep -q tmux; then
-    fusermount -u /srv/$HOST;
-    sudo nixos-container stop $HOST;
-    notify-send "Shut down" "Shut down container $HOST";
+if ! ps -C ssh -fww | grep $DOMAIN | grep -q tmux; then
+    qutebrowser &
+    #sshfs $DOMAIN: /srv/$HOST;
+    xterm -e "tmux new-session 'nvim /srv/$HOST'" &
 fi
+terminal -e "ssh -t $DOMAIN \"tmux new\"";
+#if ! ps -C ssh -fww | grep $DOMAIN | grep -q tmux; then
+#    fusermount -u /srv/$HOST;
+#    sudo nixos-container stop $HOST;
+#    notify-send "Shut down" "Shut down container $HOST";
+#fi

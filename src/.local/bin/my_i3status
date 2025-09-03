@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 import json
 import os
+import re
 import subprocess
 import sys
 
 
-TRACKING_DIR = os.path.expanduser("~/Timetracking/2021/")
+TRACKING_FILE = os.path.expanduser("~/Timetracking/current.txt")
 OCTODON_BIN = "/usr/bin/env octodon"
 
 with subprocess.Popen(
@@ -13,12 +14,12 @@ with subprocess.Popen(
 ) as i3status:
 
     def print_line(message):
-        """ Non-buffered printing to stdout. """
+        """Non-buffered printing to stdout."""
         sys.stdout.write(message + "\n")
         sys.stdout.flush()
 
     def read_line():
-        """ Interrupted respecting reader for stdin. """
+        """Interrupted respecting reader for stdin."""
         # try reading a line, removing any extra whitespace
         try:
             line = i3status.stdout.readline().strip()
@@ -48,23 +49,48 @@ with subprocess.Popen(
         octodon_summary = " {} ".format(octodon_summary.decode("utf-8").strip())
 
         last_line = ""
-        if os.path.exists(TRACKING_DIR):
-            tracking_files = os.listdir(TRACKING_DIR)
-            tracking_files.sort(
-                key=lambda f: os.stat(os.path.join(TRACKING_DIR, f)).st_mtime
-            )
-            newest_file = os.path.join(TRACKING_DIR, tracking_files[-1])
-            with open(newest_file) as tracking_data:
-                last_line = tracking_data.readlines()[-1]
-                last_line = " {} ".format(last_line.strip())
+        if os.path.exists(TRACKING_FILE):
+            with open(TRACKING_FILE, "r") as tracking_data:
+                last_line = tracking_data.readlines()[-1].strip()
+                if len(last_line) > 30:
+                    last_line = " {}...{} ".format(last_line[:22].strip(), last_line[-5:].strip())
 
-        mic_mute = int(
-            subprocess.run(
-                "pulsemixer --get-mute --id source-1",
-                stdout=subprocess.PIPE,
-                shell=True,
-            ).stdout
-        )
+        pulse_sources = subprocess.run(
+            "pulsemixer --list-sources",
+            stdout=subprocess.PIPE,
+            shell=True,
+        ).stdout.decode("utf-8")
+        sources = [
+            re.search("ID: ([^,]*),", line).group(1)
+            for line in pulse_sources.split("\n")
+            if line.startswith("Source:") and "Monitor" not in line
+        ]
+
+        mic_mute = [
+            int(
+                subprocess.run(
+                    f"pulsemixer --get-mute --id {source}",
+                    stdout=subprocess.PIPE,
+                    shell=True,
+                ).stdout
+            )
+            for source in sources
+        ]
+
+        # helpdesk = subprocess.run(
+        #    "timeout 3s jira --login=helpdesk@syslab.com list --named-query=new",
+        #    stdout=subprocess.PIPE,
+        #    shell=True,
+        # ).stdout.decode("utf-8")
+        # helpdesk_num = len([line for line in helpdesk.split("\n") if line.strip()])
+        # helpdesk_color = "#dc322f" if helpdesk_num > 0 else None
+
+        # new_mail = subprocess.run(
+        #    "timeout 3s curl -u reinhardt@syslab.com:$(pass Mail/reinhardt@syslab.com) "
+        #    "\"imaps://sslin.df.eu/INBOX?NEW\"",
+        #    stdout=subprocess.PIPE,
+        #    shell=True,
+        # ).stdout.decode("utf-8").replace("* SEARCH", "").strip()
 
         data = json.loads(line)
         data = [
@@ -74,10 +100,21 @@ with subprocess.Popen(
                 "markup": "none",
                 "full_text": octodon_summary,
             },
+            # {
+            #    "name": "helpdesk_new",
+            #    "markup": "none",
+            #    "color": helpdesk_color,
+            #    "full_text": "HLP {}".format(helpdesk_num),
+            # },
+            # {
+            #    "name": "new_mail",
+            #    "markup": "none",
+            #    "full_text": "📬" if new_mail else "📪",
+            # },
             {
                 "name": "microphone_mute",
                 "markup": "none",
-                "full_text": "🔇" if mic_mute else "🎤",
+                "full_text": "".join(["🔇" if source else "🎤" for source in mic_mute]),
             },
         ] + data
 

@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+ACTION=$(cat ~/unicode.txt | dmenu -fn "Monospace 16")
+python3 -c "print('$ACTION'[0], end='')" | xsel --clipboard -i

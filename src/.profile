@@ -20,3 +20,6 @@ fi
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
+if [ -d "$HOME/.gem/ruby/2.6.0/bin" ]; then
+    PATH="$HOME/.gem/ruby/2.6.0/bin:$PATH"
+fi

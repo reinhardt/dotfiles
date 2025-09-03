@@ -1,6 +1,7 @@
 source ~/.profile
 xset -b
 #xrandr --dpi 192
+xrandr --output eDP-1 --gamma 0.85:0.75:0.6
 xrdb ~/.Xresources
 export QT_SCALE_FACTOR=0.8
 export GDK_SCALE=0.8
