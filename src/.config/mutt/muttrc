@@ -3,15 +3,13 @@ source ~/.config/mutt/secrets.rc
 source ~/.config/mutt/gpg.rc
 source ~/.config/mutt/mutt-alias
 
-my_hdr From: Manuel Reinhardt <reinhardt@syslab.com>
-alternates '^reinhardt@syslab.com$'
-subscribe devel@syslab.com
-subscribe office@syslab.com
-set spoolfile="imaps://reinhardt\@syslab.com@sslin.df.eu/INBOX"
-set folder="imaps://reinhardt\@syslab.com@sslin.df.eu/INBOX"
+my_hdr From: Manuel Reinhardt <manuel.reinhardt@neon-cathedral.net>
+alternates '^manuel.reinhardt@neon-cathedral.net$'
+set spoolfile="imaps://manuel.reinhardt@neon-cathedral.net@imap.fastmail.com/INBOX"
+set folder="imaps://manuel.reinhardt@neon-cathedral.net@imap.fastmail.com/INBOX"
 set record="="
 set postponed="=Drafts"
-set smtp_url="smtps://reinhardt\@syslab.com@sslout.df.eu"
+set smtp_url="smtps://manuel.reinhardt@neon-cathedral.net@smtp.fastmail.com:465/"
 set include=yes
 set mime_forward=ask-yes
 
@@ -45,11 +43,10 @@ macro pager \cb <pipe-entry>'urlscan --run-safe "qutebrowser {}"'<enter> 'Follow
 
 # some exceptions to threaded sorting
 folder-hook . "set sort=reverse-threads"
-folder-hook '(Reports|proj|Mailing Lists\.github|Mattermost|Trash)' "set sort=reverse-date-sent"
+folder-hook '(Trash|Spam)' "set sort=reverse-date-sent"
 
 # auto-delete old mails
-folder-hook '(Reports|proj|Mailing Lists(|\.github)|Mattermost)' 'push "<delete-pattern>~d >1m<enter>"'
-folder-hook '(Mailing Lists\.Star Alliance|Spam)' 'push "<delete-pattern>~d >1y<enter>"'
+folder-hook '(Trash|Spam)' 'push "<delete-pattern>~d >1y<enter>"'
 
 set send_multipart_alternative=yes
 set send_multipart_alternative_filter="mutt-multipart-filter"
